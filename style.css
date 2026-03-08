@@ -646,3 +646,21 @@ body.dark-mode nav a {
     background: transparent;
     color: #a78bfa;
 }
+/* CONTACT LINKS */
+.contact-link {
+    color: white;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 4px;
+    transition: 0.3s;
+}
+
+.contact-link:hover {
+    color: #ffd700;
+    text-decoration-style: solid;
+}
+
+/* Dark mode version */
+.dark-mode .contact-link:hover {
+    color: #a78bfa;
+}
