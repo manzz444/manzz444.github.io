@@ -184,6 +184,64 @@ footer p {
     font-size: 0.9em;
 }
 
+/* HERO SECTION */
+.hero-section {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    color: white;
+    animation: fadeIn 1.5s ease-in;
+}
+
+.hero-title {
+    font-size: 3em;
+    margin-bottom: 15px;
+    animation: slideUp 1s ease-out;
+}
+
+.hero-subtitle {
+    font-size: 1.3em;
+    margin-bottom: 25px;
+    opacity: 0.9;
+    animation: slideUp 1s ease-out 0.3s both;
+}
+
+.hero-button {
+    display: inline-block;
+    background: white;
+    color: #667eea;
+    padding: 12px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+    animation: slideUp 1s ease-out 0.6s both;
+}
+
+.hero-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* ANIMASI */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* RESPONSIVE DESIGN */
 @media (max-width: 600px) {
     .container {
@@ -201,5 +259,145 @@ footer p {
     
     .projects-grid {
         grid-template-columns: 1fr;
+    }
+}
+/* DARK MODE BUTTON */
+.dark-mode-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: 0.3s;
+    z-index: 1000;
+}
+
+.dark-mode-btn:hover {
+    transform: scale(1.05);
+    background: #555;
+}
+
+/* DARK MODE STYLES */
+body.dark-mode {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+body.dark-mode .container {
+    background: #1e1e2f;
+    color: #f0f0f0;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3 {
+    color: #a78bfa;
+}
+
+body.dark-mode p,
+body.dark-mode li {
+    color: #ddd;
+}
+
+body.dark-mode .project-card {
+    background: #2d2d44;
+    border-left-color: #a78bfa;
+}
+
+body.dark-mode .skills-list {
+    background: #2d2d44;
+}
+
+body.dark-mode nav {
+    background: #2d2d44;
+}
+
+body.dark-mode nav a {
+    color: #a78bfa;
+}
+/* TESTIMONIALS */
+.testimonials {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.testimonial-card {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    border-bottom: 3px solid #667eea;
+}
+
+.testimonial-card p {
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+.testimonial-card h4 {
+    color: #667eea;
+    margin: 0;
+}
+
+.dark-mode .testimonial-card {
+    background: #2d2d44;
+    color: #ddd;
+}
+
+.dark-mode .testimonial-card h4 {
+    color: #a78bfa;
+}
+
+/* TIMELINE */
+.timeline {
+    margin: 40px 0;
+    position: relative;
+}
+
+.timeline-item {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.timeline-date {
+    min-width: 100px;
+    background: #667eea;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-align: center;
+    margin-right: 20px;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    padding: 15px 20px;
+    border-radius: 10px;
+    flex: 1;
+}
+
+.dark-mode .timeline-content {
+    background: #2d2d44;
+    color: #ddd;
+}
+
+@media (max-width: 600px) {
+    .timeline-item {
+        flex-direction: column;
+    }
+    
+    .timeline-date {
+        margin-right: 0;
+        margin-bottom: 10px;
+        width: 100%;
     }
 }

@@ -12,8 +12,16 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manzz | The Prototype</title>
+    
+    <!-- SEO OPTIMIZATION -->
+    <title>Manzz The Trickster | Portofolio Vibe Coder</title>
+    <meta name="description" content="Portofolio Manzz - Vibe coder yang belajar bikin website dari nol. Lihat project HTML, CSS, dan JavaScript sederhana.">
+    <meta name="keywords" content="portofolio, vibe coder, website pemula, HTML, CSS, JavaScript">
+    <meta name="author" content="Manzz The Trickster">
+    
+    <!-- META TAG VERIFIKASI GOOGLE -->
     <meta name="google-site-verification" content="epkOn4ZB-3Pxho0dPiawMxQJDQzEo5iw4OR9BdjbjDw" />
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,9 +33,16 @@
             <a href="#">Contact</a>
         </nav>
         
+        <!-- HERO SECTION BARU -->
+        <div class="hero-section">
+            <h1 class="hero-title">Manzz The Trickster</h1>
+            <p class="hero-subtitle">Vibe Coder | Belajar dari nol sampai muncul di Google</p>
+            <a href="#projects" class="hero-button">Lihat Project</a>
+        </div>
+
         <h1>Hi, my name is Manzz.</h1>
         
-        <img src="photo_profile.jpg" alt="Foto Profil Manzz The trickster" class="photo_profile">
+        <img src="photo_profile.jpg" alt="Foto profil Manzz The Trickster, vibe coder pemula yang belajar bikin website" class="photo_profile">
         
         <p class="subtitle">I am still learning how to make a website from zero.</p>
         <p class="highlight">This is my first website project.</p>
@@ -61,6 +76,40 @@
             </div>
         </div>
 
+                <!-- TESTIMONI SECTION -->
+        <h2>💬 Kata Mereka</h2>
+        <div class="testimonials">
+            <div class="testimonial-card">
+                <p>"Manzz tanya melulu tapi akhirnya website jadi juga. Vibe coding banget!"</p>
+                <h4>- ChatGPT</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"Dari nol sampai muncul di Google dalam seminggu. Respect!"</p>
+                <h4>- Google Search Console</h4>
+            </div>
+        </div>
+
+        <!-- TIMELINE BELAJAR -->
+        <h2>📅 Perjalanan Belajar</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">Minggu 1</div>
+                <div class="timeline-content">Belajar HTML dasar, bikin struktur website</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Minggu 2</div>
+                <div class="timeline-content">Belajar CSS, bikin website jadi cantik</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Minggu 3</div>
+                <div class="timeline-content">Upload ke GitHub, daftar Google Search Console</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Minggu 4</div>
+                <div class="timeline-content">Website muncul di Google! 🎉</div>
+            </div>
+        </div>
+
         <h2>📬 Contact Me</h2>
         <div class="contact-card">
             <p>📧 Email: rakaadriansaputra473@gmail.com</p>
@@ -74,5 +123,22 @@
             <p>© 2024 Manzz The Trickster. Made with silent and a little bit of magic ✨</p>
         </footer>
     </div>
+
+    <!-- DARK MODE TOGGLE -->
+    <button id="darkModeToggle" class="dark-mode-btn">🌙 Dark Mode</button>
+
+    <script>
+    // DARK MODE TOGGLE
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        if(document.body.classList.contains('dark-mode')) {
+            darkModeToggle.textContent = '☀️ Light Mode';
+        } else {
+            darkModeToggle.textContent = '🌙 Dark Mode';
+        }
+    });
+    </script>
+
 </body>
 </html>
