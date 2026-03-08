@@ -28,9 +28,9 @@
     <div class="container">
         <nav>
             <a href="#">Home</a>
-            <a href="#">About Me</a>
-            <a href="#">Projects</a>
-            <a href="#">Contact</a>
+            <a href="blog.html">Blog</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
         </nav>
         
         <!-- HERO SECTION BARU -->
@@ -112,8 +112,15 @@
         <div class="contact-card">
             <p>📧 Email: rakaadriansaputra473@gmail.com</p>
             <p>🐙 GitHub: github.com/manzz444</p>
-            <a href="mailto:rakaadriansaputra473@gmail.com" class="contact-button">Send Email</a>
-        </div>
+    
+        <!-- FORM KONTAK DARI FORMSPREE -->
+        <form action="https://formspree.io/f/xbdzlkvk" method="POST" class="contact-form">
+            <input type="text" name="name" placeholder="Nama kamu" required>
+            <input type="email" name="email" placeholder="Email kamu" required>
+            <textarea name="message" placeholder="Pesan kamu" rows="3" required></textarea>
+            <button type="submit" class="contact-button">Kirim Pesan</button>
+        </form>
+    </div>
         
         <hr>
         
