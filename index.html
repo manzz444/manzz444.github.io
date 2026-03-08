@@ -14,15 +14,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO OPTIMIZATION -->
-    <title>Manzz The Trickster | Portofolio Vibe Coder</title>
-    <meta name="description" content="Portofolio Manzz - Vibe coder yang belajar bikin website dari nol. Lihat project HTML, CSS, dan JavaScript sederhana.">
+    <title>The Prototype | Portofolio Vibe Coder</title>
+    <meta name="description" content="Portofolio Asril - Vibe coder yang belajar bikin website dari nol. Lihat project HTML, CSS, dan JavaScript sederhana.">
     <meta name="keywords" content="portofolio, vibe coder, website pemula, HTML, CSS, JavaScript">
-    <meta name="author" content="Manzz The Trickster">
+    <meta name="author" content="Asril Ilham N.F">
     
     <!-- META TAG VERIFIKASI GOOGLE -->
     <meta name="google-site-verification" content="epkOn4ZB-3Pxho0dPiawMxQJDQzEo5iw4OR9BdjbjDw" />
     
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫠</text></svg>">
 </head>
 <body>
     <div class="container">
@@ -35,12 +36,12 @@
         
         <!-- HERO SECTION BARU -->
         <div class="hero-section">
-            <h1 class="hero-title">Manzz The Trickster</h1>
+            <h1 class="hero-title">Asril Ilham Nur Firmansyah</h1>
             <p class="hero-subtitle">Vibe Coder | Belajar dari nol sampai muncul di Google</p>
             <a href="#projects" class="hero-button">Lihat Project</a>
         </div>
         
-        <img src="photo_profile.jpg" alt="Foto profil Manzz The Trickster, vibe coder pemula yang belajar bikin website" class="photo_profile">
+        <img src="photo_profile.jpg" alt="Foto profil Asril, vibe coder pemula yang belajar bikin website" class="photo_profile">
         
         <p class="subtitle">I am still learning how to make a website from zero.</p>
         <p class="highlight">This is my first website project.</p>
@@ -79,7 +80,7 @@
         <div class="testimonials">
             <div class="testimonial-card">
                 <p>"Manzz tanya melulu tapi akhirnya website jadi juga. Vibe coding banget!"</p>
-                <h4>- ChatGPT</h4>
+                <h4>- ChatGPT & Deepseek</h4>
             </div>
             <div class="testimonial-card">
                 <p>"Dari nol sampai muncul di Google dalam seminggu. Respect!"</p>
@@ -110,8 +111,15 @@
 
         <h2>📬 Contact Me</h2>
         <div class="contact-card">
-            <p>📧 Email: rakaadriansaputra473@gmail.com</p>
+            <p>📧 Email: asril_firmansyah_34rpl@student.smktelkom-mlg.sch.id</p>
             <p>🐙 GitHub: github.com/manzz444</p>
+        
+        <div class="social-links">
+            <a href="https://instagram.com/rill_2195" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://linkedin.com/in/asrill-firmansyah-60693335" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://twitter.com/Rill_2195" target="_blank" rel="noopener">Twitter</a>
+            <a href="cv-asril.pdf" download class="cv-button">📄 Download CV</a>
+        </div>
     
         <!-- FORM KONTAK DARI FORMSPREE -->
         <form action="https://formspree.io/f/xbdzlkvk" method="POST" class="contact-form">
@@ -125,7 +133,7 @@
         <hr>
         
         <footer>
-            <p>© 2024 Manzz The Trickster. Made with silent and a little bit of magic ✨</p>
+            <p>© 2024 Asril cah Blitar. Made with silent and a little bit of magic ✨</p>
         </footer>
     </div>
 
@@ -143,6 +151,22 @@
             darkModeToggle.textContent = '🌙 Dark Mode';
         }
     });
+    </script>
+
+        <!-- SCROLL REVEAL ANIMATION -->
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('h2, .project-card, .testimonial-card, .timeline-item, .blog-card').forEach(el => {
+            el.classList.add('reveal');
+            observer.observe(el);
+        });
     </script>
 
 </body>

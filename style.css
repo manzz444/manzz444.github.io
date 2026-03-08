@@ -480,3 +480,14 @@ body.dark-mode nav a {
 .dark-mode .blog-card {
     background: #2d2d44;
 }
+/* ANIMATIONS */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+
+.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
