@@ -141,78 +141,6 @@ p {
     border-left-color: #764ba2;
 }
 
-/* CONTACT SECTION */
-.contact-card {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    padding: 40px 30px;
-    border-radius: 10px;
-    color: white;
-    text-align: center;
-}
-
-.contact-card p {
-    color: white;
-    margin: 12px 0;
-    text-align: center;  /* DIPAKSA TENGAH */
-    font-size: 1.1em;
-}
-
-/* CONTACT BUTTONS CONTAINER */
-.contact-buttons {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 30px 0 20px;
-}
-
-/* FORM STYLES */
-.contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 25px;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.contact-form input,
-.contact-form textarea {
-    padding: 15px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1em;
-    width: 100%;
-    box-sizing: border-box;
-    background: rgba(255,255,255,0.9);
-}
-
-.contact-form input:focus,
-.contact-form textarea:focus {
-    outline: 2px solid white;
-    background: white;
-}
-
-/* WA LINK */
-.wa-link {
-    color: #25D366;
-    text-decoration: none;
-    font-weight: 600;
-    background: rgba(255,255,255,0.2);
-    padding: 3px 10px;
-    border-radius: 20px;
-    margin-left: 5px;
-}
-
-.wa-link:hover {
-    background: rgba(255,255,255,0.3);
-}
-
-.dark-mode .wa-link {
-    color: #4ecf7e;
-}
-
 /* HERO SECTION */
 .hero-section {
     text-align: center;
@@ -271,84 +199,6 @@ p {
     }
 }
 
-/* RESPONSIVE DESIGN */
-@media (max-width: 600px) {
-    .container {
-        padding: 15px;
-    }
-    
-    h1 {
-        font-size: 2em;
-    }
-    
-    nav {
-        gap: 15px;
-        border-radius: 20px;
-    }
-    
-    .projects-grid {
-        grid-template-columns: 1fr;
-    }
-}
-/* DARK MODE BUTTON */
-.dark-mode-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 12px 20px;
-    background: #333;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: 600;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: 0.3s;
-    z-index: 1000;
-}
-
-.dark-mode-btn:hover {
-    transform: scale(1.05);
-    background: #555;
-}
-
-/* DARK MODE STYLES */
-body.dark-mode {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-}
-
-body.dark-mode .container {
-    background: #1e1e2f;
-    color: #f0f0f0;
-}
-
-body.dark-mode h1,
-body.dark-mode h2,
-body.dark-mode h3 {
-    color: #a78bfa;
-}
-
-body.dark-mode p,
-body.dark-mode li {
-    color: #ddd;
-}
-
-body.dark-mode .project-card {
-    background: #2d2d44;
-    border-left-color: #a78bfa;
-}
-
-body.dark-mode .skills-list {
-    background: #2d2d44;
-}
-
-body.dark-mode nav {
-    background: #2d2d44;
-}
-
-body.dark-mode nav a {
-    color: #a78bfa;
-}
 /* TESTIMONIALS */
 .testimonials {
     display: grid;
@@ -373,15 +223,6 @@ body.dark-mode nav a {
 .testimonial-card h4 {
     color: #667eea;
     margin: 0;
-}
-
-.dark-mode .testimonial-card {
-    background: #2d2d44;
-    color: #ddd;
-}
-
-.dark-mode .testimonial-card h4 {
-    color: #a78bfa;
 }
 
 /* TIMELINE */
@@ -414,22 +255,6 @@ body.dark-mode nav a {
     flex: 1;
 }
 
-.dark-mode .timeline-content {
-    background: #2d2d44;
-    color: #ddd;
-}
-
-@media (max-width: 600px) {
-    .timeline-item {
-        flex-direction: column;
-    }
-    
-    .timeline-date {
-        margin-right: 0;
-        margin-bottom: 10px;
-        width: 100%;
-    }
-}
 /* BLOG STYLES */
 .blog-posts {
     display: flex;
@@ -464,9 +289,6 @@ body.dark-mode nav a {
     font-weight: 600;
 }
 
-.dark-mode .blog-card {
-    background: #2d2d44;
-}
 /* ANIMATIONS */
 .reveal {
     opacity: 0;
@@ -478,6 +300,159 @@ body.dark-mode nav a {
     opacity: 1;
     transform: translateY(0);
 }
+
+/* DARK MODE BUTTON */
+.dark-mode-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: 0.3s;
+    z-index: 1000;
+}
+
+.dark-mode-btn:hover {
+    transform: scale(1.05);
+    background: #555;
+}
+
+/* 404 ERROR PAGE */
+.error-container {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.error-emoji {
+    font-size: 6em;
+    margin: 0;
+}
+
+.error-code {
+    font-size: 3em;
+    color: #ff6e6e;
+}
+
+.error-text {
+    font-size: 1.2em;
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+/* ===== CONTACT SECTION (GABUNGAN) ===== */
+.contact-card {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 40px 30px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+}
+
+.contact-card p {
+    color: white;
+    margin: 15px 0;
+    text-align: center;
+    font-size: 1.1em;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* CONTACT BUTTONS */
+.contact-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 30px 0 20px;
+}
+
+.cv-button, .contact-button {
+    display: inline-block;
+    background: white;
+    color: #667eea;
+    padding: 12px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+    border: 2px solid white;
+    min-width: 140px;
+    cursor: pointer;
+}
+
+.cv-button:hover, .contact-button:hover {
+    background: transparent;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* FORM STYLES */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(255,255,255,0.9);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: 2px solid white;
+    background: white;
+}
+
+/* CONTACT LINKS */
+.contact-link {
+    color: white;
+    text-decoration: underline dotted rgba(255,255,255,0.7);
+    text-underline-offset: 4px;
+    transition: 0.3s;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.contact-link:hover {
+    color: #ffd700;
+    text-decoration-style: solid;
+}
+
+/* WA LINK */
+.wa-link {
+    color: #25D366;
+    text-decoration: none;
+    font-weight: 600;
+    background: rgba(255,255,255,0.2);
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-left: 5px;
+}
+
+.wa-link:hover {
+    background: rgba(255,255,255,0.3);
+}
+
 /* SOCIAL LINKS */
 .social-links {
     display: flex;
@@ -503,164 +478,115 @@ body.dark-mode nav a {
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
-.dark-mode .social-link {
-    background: #a78bfa;
-    color: #1a1a2e;
-}
-.error-container{
-  text-align:center;
-  padding:60px 20px;
+/* ===== DARK MODE STYLES (GABUNGAN) ===== */
+body.dark-mode {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
 
-.error-emoji{
-  font-size:6em;
-  margin:0;
+body.dark-mode .container {
+    background: #1e1e2f;
+    color: #f0f0f0;
 }
 
-.error-code{
-  font-size:3em;
-  color:#ff6e6e;
-}
-
-.error-text{
-  font-size:1.2em;
-  max-width:500px;
-  margin:20px auto;
-}
-
-.error-button{
-  margin-top:20px;
-}
-/* DOWNLOAD CV BUTTON */
-.cv-button {
-    display: inline-block;
-    background: white;
-    color: #667eea;
-    padding: 10px 30px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 600;
-    margin: 10px 5px;
-    transition: 0.3s;
-    border: 2px solid white;
-}
-
-.cv-button:hover {
-    background: transparent;
-    color: white;
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(255,255,255,0.3);
-}
-
-/* DARK MODE VERSION */
-.dark-mode .cv-button {
-    background: #a78bfa;
-    color: #1a1a2e;
-    border-color: #a78bfa;
-}
-
-.dark-mode .cv-button:hover {
-    background: transparent;
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3 {
     color: #a78bfa;
 }
-/* CONTACT BUTTONS CONTAINER */
-.contact-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 20px 0;
+
+body.dark-mode p,
+body.dark-mode li {
+    color: #ddd;
 }
 
-/* WA LINK */
-.wa-link {
-    color: #25D366;
-    text-decoration: none;
-    font-weight: 600;
+body.dark-mode .project-card,
+body.dark-mode .skills-list,
+body.dark-mode nav,
+body.dark-mode .testimonial-card,
+body.dark-mode .timeline-content,
+body.dark-mode .blog-card {
+    background: #2d2d44;
 }
 
-.wa-link:hover {
-    text-decoration: underline;
+body.dark-mode .project-card {
+    border-left-color: #a78bfa;
 }
 
-.dark-mode .wa-link {
+body.dark-mode nav a {
+    color: #a78bfa;
+}
+
+body.dark-mode .testimonial-card h4 {
+    color: #a78bfa;
+}
+
+body.dark-mode .contact-link:hover {
+    color: #a78bfa;
+}
+
+body.dark-mode .wa-link {
     color: #4ecf7e;
 }
 
-/* Pastikan contact-card paragraphs rata kiri */
-.contact-card p {
-    text-align: left;
-    margin: 10px 0;
-}
-/* DOWNLOAD CV BUTTON */
-.cv-button {
-    display: inline-block;
-    background: white;
-    color: #667eea;
-    padding: 12px 25px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: 0.3s;
-    border: 2px solid white;
-    min-width: 140px;
-}
-
-.cv-button:hover {
-    background: transparent;
-    color: white;
-    transform: scale(1.05);
-}
-
-/* CONTACT BUTTON (untuk Send Email & Kirim Pesan) */
-.contact-button {
-    display: inline-block;
-    background: white;
-    color: #667eea;
-    padding: 12px 25px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: 0.3s;
-    border: 2px solid white;
-    cursor: pointer;
-    min-width: 140px;
-}
-
-.contact-button:hover {
-    background: transparent;
-    color: white;
-    transform: scale(1.05);
-}
-
-/* DARK MODE VERSION */
-.dark-mode .cv-button,
-.dark-mode .contact-button {
+body.dark-mode .cv-button,
+body.dark-mode .contact-button {
     background: #a78bfa;
     color: #1a1a2e;
     border-color: #a78bfa;
 }
 
-.dark-mode .cv-button:hover,
-.dark-mode .contact-button:hover {
+body.dark-mode .cv-button:hover,
+body.dark-mode .contact-button:hover {
     background: transparent;
     color: #a78bfa;
 }
-/* CONTACT LINKS */
-.contact-link {
-    color: white;
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: 4px;
-    transition: 0.3s;
+
+body.dark-mode .social-link {
+    background: #a78bfa;
+    color: #1a1a2e;
 }
 
-.contact-link:hover {
-    color: #ffd700;
-    text-decoration-style: solid;
-}
-
-/* Dark mode version */
-.dark-mode .contact-link:hover {
-    color: #a78bfa;
+/* ===== RESPONSIVE DESIGN (GABUNGAN) ===== */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    nav {
+        gap: 15px;
+        border-radius: 20px;
+    }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .timeline-item {
+        flex-direction: column;
+    }
+    
+    .timeline-date {
+        margin-right: 0;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    
+    .contact-card p {
+        font-size: 0.9em;
+        line-height: 1.5;
+        margin: 12px 0;
+    }
+    
+    .contact-link {
+        font-size: 0.9em;
+    }
+    
+    .cv-button, .contact-button {
+        min-width: 120px;
+        padding: 10px 20px;
+    }
 }
