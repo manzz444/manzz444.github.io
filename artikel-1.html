@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RJWXMV8SNN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-RJWXMV8SNN');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minggu 4: AKHIRNYA MUNCUL DI GOOGLE! - Blog Asril</title>
+    <meta name="description" content="Cerita perjalanan minggu ke-4: website pertama masuk Google!">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="blog-style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫠</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html#home">Home</a>
+            <a href="blog.html">Blog</a>
+            <a href="index.html#projects">Projects</a>
+            <a href="index.html#contact">Contact</a>
+        </nav>
+
+        <article class="article-container">
+            <header class="article-header">
+                <h1>Minggu 4: AKHIRNYA MUNCUL DI GOOGLE!</h1>
+                <div class="article-meta">
+                    <span>📅 8 Maret 2026</span>
+                    <span>⏱️ 4 menit baca</span>
+                </div>
+            </header>
+
+            <div class="article-content">
+                <p>Gak nyangka banget! Setelah submit sitemap dan minta indeks, sekitar 5 hari kemudian website mulai muncul di Google. Pas cek pake <code>site:manzz444.github.io</code>, keluar hasilnya. Rasanya campur aduk antara seneng dan gak percaya. Ternyata beneran bisa!</p>
+
+                <h2>📊 Prosesnya:</h2>
+                <ul>
+                    <li><strong>Hari 1-2:</strong> Submit sitemap ke Google Search Console</li>
+                    <li><strong>Hari 3:</strong> Minta indeks lewat fitur URL Inspection</li>
+                    <li><strong>Hari 5:</strong> Cek pake "site:" dan muncul! 🎉</li>
+                </ul>
+
+                <h2>🔥 Yang udah dipelajari:</h2>
+                <ul>
+                    <li>HTML & CSS dasar</li>
+                    <li>Google Analytics (pasang tracking code)</li>
+                    <li>Google Search Console (verifikasi + sitemap)</li>
+                    <li>Dark mode toggle pake JavaScript</li>
+                    <li>Form kontak pake Formspree</li>
+                    <li>Dan yang paling penting: <strong>sabar</strong></li>
+                </ul>
+
+                <h2>💡 Tips buat yang baru mulai:</h2>
+                <p>Jangan takut salah. Minta bantuan AI (ChatGPT/Deepseek) kalau bingung. Yang penting jalan dulu, rapi belakangan. Vibe coding is real!</p>
+            </div>
+
+            <footer class="article-footer">
+                <a href="blog.html" class="back-to-blog">← Kembali ke Blog</a>
+                <div class="article-nav">
+                    <a href="artikel-2.html">Artikel Sebelumnya</a>
+                </div>
+            </footer>
+        </article>
+
+        <footer>
+            <p>© 2024 Asril cah Blitar. Made with silent and a little bit of magic ✨</p>
+        </footer>
+    </div>
+
+    <!-- DARK MODE TOGGLE -->
+    <button id="darkModeToggle" class="dark-mode-btn">🌙 Dark Mode</button>
+
+    <script>
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+        });
+    </script>
+</body>
+</html>
