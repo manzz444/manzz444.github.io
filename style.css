@@ -576,3 +576,32 @@ body.dark-mode nav a {
     background: transparent;
     color: #a78bfa;
 }
+/* CONTACT BUTTONS CONTAINER */
+.contact-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+/* WA LINK */
+.wa-link {
+    color: #25D366;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.wa-link:hover {
+    text-decoration: underline;
+}
+
+.dark-mode .wa-link {
+    color: #4ecf7e;
+}
+
+/* Pastikan contact-card paragraphs rata kiri */
+.contact-card p {
+    text-align: left;
+    margin: 10px 0;
+}
