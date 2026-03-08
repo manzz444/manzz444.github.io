@@ -544,3 +544,35 @@ body.dark-mode nav a {
 .error-button{
   margin-top:20px;
 }
+/* DOWNLOAD CV BUTTON */
+.cv-button {
+    display: inline-block;
+    background: white;
+    color: #667eea;
+    padding: 10px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 10px 5px;
+    transition: 0.3s;
+    border: 2px solid white;
+}
+
+.cv-button:hover {
+    background: transparent;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+}
+
+/* DARK MODE VERSION */
+.dark-mode .cv-button {
+    background: #a78bfa;
+    color: #1a1a2e;
+    border-color: #a78bfa;
+}
+
+.dark-mode .cv-button:hover {
+    background: transparent;
+    color: #a78bfa;
+}
