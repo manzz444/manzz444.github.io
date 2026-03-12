@@ -225,3 +225,26 @@
         justify-content: center;
     }
 }
+/* ===== RESPONSIVE NAVIGATION UNTUK HALAMAN BLOG ===== */
+@media (max-width: 600px) {
+    nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 15px 10px;
+        width: 100%;
+        border-radius: 30px;
+        background: #f8f9fa;
+    }
+
+    nav a {
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    nav a:last-child {
+        border-bottom: none;
+    }
+}
