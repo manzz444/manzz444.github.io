@@ -80,7 +80,7 @@ h2 {
     margin: 0 auto;
 }
 
-.info h3 {
+.info h3, .skills h3 {
     color: #333;
     margin-bottom: 15px;
     border-bottom: 2px solid #667eea;
@@ -96,6 +96,62 @@ h2 {
     padding: 8px 0;
     color: #555;
     border-bottom: 1px solid #eee;
+}
+
+.skill-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.badge {
+    background: #f0f0f0;
+    color: #333;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.contact-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 30px 0;
+}
+
+.btn-primary, .btn-secondary {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+    border: 2px solid transparent;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.btn-primary:hover {
+    background: transparent;
+    color: #667eea;
+}
+
+.btn-secondary {
+    background: #764ba2;
+    color: white;
+    border-color: #764ba2;
+}
+
+.btn-secondary:hover {
+    background: transparent;
+    color: #764ba2;
 }
 
 footer {

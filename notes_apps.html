@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project 3 - Notes Application</title>
-    <link rel="stylesheet" href="notes_apps_style.css">
+    <title>Relaxed Notes App</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
             <h1>📝 Relaxed Notes</h1>
-            <p class="subtitle">A simple note-taking application (still in development)</p>
+            <p class="subtitle">A simple note-taking application (demo mode)</p>
             <a href="../../index.html#projects" class="back-link">← Back to Projects</a>
         </header>
 
         <div class="notes-app">
             <div class="note-input">
-                <input type="text" placeholder="Note title" class="note-title" disabled>
-                <textarea placeholder="Note content..." class="note-content" disabled></textarea>
-                <button class="add-note" disabled>Add Note</button>
+                <input type="text" placeholder="Note title" class="note-title" id="noteTitle">
+                <textarea placeholder="Note content..." class="note-content" id="noteContent"></textarea>
+                <button class="add-note" onclick="demoFeature()">➕ Add Note (Demo)</button>
             </div>
 
             <div class="notes-list">
@@ -36,8 +36,15 @@
         </div>
 
         <footer>
-            <p>© 2024 - Notes App (Development Mode)</p>
+            <p>© 2026 - Notes App (Development Mode)</p>
         </footer>
     </div>
+
+    <!-- SIMPLE DEMO SCRIPT -->
+    <script>
+        function demoFeature() {
+            alert("🚧 Demo mode: This feature will be available soon! You'll be able to add, edit, and delete notes.");
+        }
+    </script>
 </body>
 </html>

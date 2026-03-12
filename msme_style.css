@@ -62,34 +62,39 @@ nav {
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-.features {
+.features, .menu {
     padding: 60px 20px;
     text-align: center;
 }
 
-.features h2 {
+.features h2, .menu h2 {
     color: #333;
     margin-bottom: 40px;
     font-size: 2em;
 }
 
-.feature-grid {
+.feature-grid, .menu-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 30px;
     max-width: 900px;
     margin: 0 auto;
 }
 
-.feature {
+.feature, .menu-item {
     background: #f8f9fa;
     padding: 30px;
     border-radius: 10px;
 }
 
-.feature h3 {
+.feature h3, .menu-item h3 {
     color: #ff6b6b;
     margin-bottom: 10px;
+}
+
+.menu-item p {
+    font-weight: 600;
+    color: #333;
 }
 
 footer {

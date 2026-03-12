@@ -42,6 +42,10 @@ h1 {
     font-weight: 600;
 }
 
+.back-link:hover {
+    text-decoration: underline;
+}
+
 .notes-app {
     display: grid;
     gap: 40px;
@@ -53,7 +57,7 @@ h1 {
     border-radius: 10px;
 }
 
-.note-title {
+.note-title, .note-content {
     width: 100%;
     padding: 12px;
     border: 2px solid #ddd;
@@ -63,12 +67,6 @@ h1 {
 }
 
 .note-content {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    font-size: 1em;
     min-height: 100px;
     resize: vertical;
 }
@@ -80,8 +78,13 @@ h1 {
     padding: 12px 25px;
     border-radius: 8px;
     font-weight: 600;
-    cursor: not-allowed;
-    opacity: 0.6;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-note:hover {
+    background: #2ecc71;
+    transform: scale(1.02);
 }
 
 .notes-list {
