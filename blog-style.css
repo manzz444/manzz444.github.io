@@ -225,26 +225,18 @@
         justify-content: center;
     }
 }
-/* ===== RESPONSIVE NAVIGATION UNTUK HALAMAN BLOG ===== */
+/* ===== RESPONSIVE NAVIGASI UNTUK HP ===== */
 @media (max-width: 600px) {
     nav {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        padding: 15px 10px;
-        width: 100%;
-        border-radius: 30px;
-        background: #f8f9fa;
+        gap: 8px;
+        font-size: 0.85em;
+        padding: 10px 8px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     nav a {
-        width: 100%;
-        text-align: center;
-        padding: 10px 0;
-        border-bottom: 1px solid rgba(0,0,0,0.1);
-    }
-
-    nav a:last-child {
-        border-bottom: none;
+        padding: 6px 10px;
+        white-space: nowrap;
     }
 }
