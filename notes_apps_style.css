@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+h1 {
+    color: #43e97b;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.back-link {
+    display: inline-block;
+    color: #43e97b;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.notes-app {
+    display: grid;
+    gap: 40px;
+}
+
+.note-input {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.note-title {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+.note-content {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 1em;
+    min-height: 100px;
+    resize: vertical;
+}
+
+.add-note {
+    background: #43e97b;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.notes-list {
+    display: grid;
+    gap: 15px;
+}
+
+.note-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 5px solid #43e97b;
+}
+
+.note-card h3 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.note-card small {
+    color: #888;
+    display: block;
+    margin-top: 10px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    color: #888;
+}
