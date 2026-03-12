@@ -154,6 +154,35 @@ h2 {
     color: #764ba2;
 }
 
+.social, .funfact {
+    text-align: center;
+    margin: 40px 0 20px;
+}
+.social-icons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+.social-icons a {
+    background: #f0f0f0;
+    color: #667eea;
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.social-icons a:hover {
+    background: #667eea;
+    color: white;
+}
+.funfact p {
+    color: #666;
+    font-style: italic;
+}
+
 footer {
     text-align: center;
     margin-top: 40px;

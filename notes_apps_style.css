@@ -110,6 +110,27 @@ h1 {
     margin-top: 10px;
 }
 
+.delete-btn {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 0.85em;
+    transition: 0.2s;
+}
+
+.delete-btn:hover {
+    background: #ff4757;
+    transform: scale(1.02);
+}
+
+.note-card {
+    position: relative;
+}
+
 footer {
     text-align: center;
     margin-top: 40px;

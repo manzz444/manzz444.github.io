@@ -10,41 +10,91 @@
     <div class="container">
         <header>
             <h1>📝 Relaxed Notes</h1>
-            <p class="subtitle">A simple note-taking application (demo mode)</p>
+            <p class="subtitle">A simple note-taking application</p>
             <a href="index.html#projects" class="back-link">← Back to Projects</a>
         </header>
 
         <div class="notes-app">
+            <!-- FORM INPUT -->
             <div class="note-input">
-                <input type="text" placeholder="Note title" class="note-title" id="noteTitle">
-                <textarea placeholder="Note content..." class="note-content" id="noteContent"></textarea>
-                <button class="add-note" onclick="demoFeature()">➕ Add Note (Demo)</button>
+                <input type="text" id="noteTitle" placeholder="Note title" class="note-title">
+                <textarea id="noteContent" placeholder="Note content..." class="note-content"></textarea>
+                <button class="add-note" onclick="addNote()">➕ Add Note</button>
             </div>
 
-            <div class="notes-list">
-                <div class="note-card">
-                    <h3>Example Note 1</h3>
-                    <p>This is an example note. Features are still under development.</p>
-                    <small>March 15, 2026</small>
-                </div>
-                <div class="note-card">
-                    <h3>Example Note 2</h3>
-                    <p>You will be able to add, edit, and delete notes later.</p>
-                    <small>March 15, 2026</small>
-                </div>
+            <!-- DAFTAR CATATAN -->
+            <div class="notes-list" id="notesList">
+                <!-- nanti diisi lewat javascript -->
             </div>
         </div>
 
         <footer>
-            <p>© 2026 - Notes App (Development Mode)</p>
+            <p>© 2026 - Notes App (Simple Version)</p>
         </footer>
     </div>
 
-    <!-- SIMPLE DEMO SCRIPT -->
     <script>
-        function demoFeature() {
-            alert("🚧 Demo mode: This feature will be available soon! You'll be able to add, edit, and delete notes.");
+        // Array kosong buat nyimpan catatan
+        let notes = [];
+
+        // Fungsi buat nampilin catatan
+        function displayNotes() {
+            const list = document.getElementById('notesList');
+            list.innerHTML = ''; // kosongin dulu
+
+            for (let i = 0; i < notes.length; i++) {
+                const note = notes[i];
+                list.innerHTML += `
+                    <div class="note-card">
+                        <h3>${note.title}</h3>
+                        <p>${note.content}</p>
+                        <small>${note.date}</small>
+                        <button class="delete-btn" onclick="deleteNote(${i})">🗑️ Hapus</button>
+                    </div>
+                `;
+            }
         }
+
+        // Fungsi buat nambah catatan
+        function addNote() {
+            const title = document.getElementById('noteTitle').value;
+            const content = document.getElementById('noteContent').value;
+
+            if (title === '' || content === '') {
+                alert('Judul dan isi catatan harus diisi!');
+                return;
+            }
+
+            // Buat object catatan baru
+            const newNote = {
+                title: title,
+                content: content,
+                date: new Date().toLocaleDateString('id-ID', { 
+                    day: 'numeric', 
+                    month: 'long', 
+                    year: 'numeric' 
+                })
+            };
+
+            // Tambah ke array
+            notes.push(newNote);
+
+            // Kosongin input
+            document.getElementById('noteTitle').value = '';
+            document.getElementById('noteContent').value = '';
+
+            // Tampilkan ulang
+            displayNotes();
+        }
+
+        // Fungsi buat hapus catatan
+        function deleteNote(index) {
+            notes.splice(index, 1); // hapus dari array
+            displayNotes(); // tampilkan ulang
+        }
+
+        // Pas pertama kali buka, langsung tampilkan (masih kosong)
+        displayNotes();
     </script>
 </body>
 </html>
