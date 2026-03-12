@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacker Dashboard | Asril</title>
+    <title>Dashboard | Admin</title>
     <link rel="stylesheet" href="dashboard_style.css">
 </head>
 <body>
-    <div class="dashboard">
-        <div class="header">[ HACKER DASHBOARD v21.2.2010 ]</div>
+    <!-- PASSWORD PROMPT -->
+    <div id="passwordPrompt" class="password-prompt">
+        <h2>🔒 Admin Only</h2>
+        <label for="passwordInput" class="hidden-label">Password</label>
+        <input type="password" id="passwordInput" class="password-input" placeholder="Enter password">
+        <button onclick="checkPassword()" class="password-btn">Submit</button>
+    </div>
+
+    <!-- DASHBOARD CONTENT -->
+    <div id="mainContent" class="dashboard hidden">
+        <div class="header">[ HACKER DASHBOARD ]</div>
         <div class="stats-grid">
             <div class="stat">👥 Visitors: 1,337</div>
             <div class="stat">📁 Projects: 3</div>
@@ -20,16 +29,41 @@
             <div>CSS: <progress value="85" max="100"></progress> 85%</div>
             <div>JS: <progress value="60" max="100"></progress> 60%</div>
         </div>
-        <div class="log">[LOG] 2026-03-12 14:32:01 — Tribute page updated</div>
-        <div class="log">[LOG] 2026-03-12 09:12:44 — Games theme deployed</div>
-        <div class="log">[LOG] 2026-03-11 23:45:12 — Hacker terminal online</div>
+        <div class="log">[LOG] 2026-03-12 — Tribute page updated</div>
+        <div class="log">[LOG] 2026-03-12 — Games theme deployed</div>
+        <div class="log">[LOG] 2026-03-11 — Hacker terminal online</div>
         <div class="menu">
             <a href="hacker.html">◀ HACKER</a>
             <a href="games_retro.html">GAMES ◀</a>
             <a href="tribute.html">TRIBUTE ▶</a>
-            <a href="index.html">🏠 HOME</a>
+            <a href="../index.html">🏠 HOME</a>
         </div>
-        <div class="footer"># root@asril • Access granted • UID 0</div>
     </div>
+
+    <script>
+        const ADMIN_PASSWORD = 'admin123';
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const promptDiv = document.getElementById('passwordPrompt');
+            const contentDiv = document.getElementById('mainContent');
+
+            if (input.value === ADMIN_PASSWORD) {
+                promptDiv.classList.add('hidden');
+                contentDiv.classList.remove('hidden');
+                sessionStorage.setItem('dashboardAuth', 'true');
+            } else {
+                alert('Access denied');
+                window.location.href = '../index.html';
+            }
+        }
+
+        window.onload = function() {
+            if (sessionStorage.getItem('dashboardAuth') === 'true') {
+                document.getElementById('passwordPrompt').classList.add('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+            }
+        };
+    </script>
 </body>
 </html>
