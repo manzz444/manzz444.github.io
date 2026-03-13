@@ -138,3 +138,33 @@ footer {
     border-top: 1px solid #ddd;
     color: #888;
 }
+/* notes_apps_style.css - tambahkan di bagian bawah */
+
+.delete-btn {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 0.8em;
+    transition: 0.2s;
+}
+
+.delete-btn:hover {
+    background: #ff4757;
+    transform: scale(1.05);
+}
+
+/* Style untuk empty state */
+.note-card {
+    position: relative;
+    padding-bottom: 45px;
+}
+
+.note-card .delete-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+}

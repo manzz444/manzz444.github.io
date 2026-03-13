@@ -10,91 +10,124 @@
     <div class="container">
         <header>
             <h1>📝 Relaxed Notes</h1>
-            <p class="subtitle">A simple note-taking application</p>
+            <p class="subtitle">A simple note-taking application with local storage</p>
             <a href="index.html#projects" class="back-link">← Back to Projects</a>
         </header>
 
         <div class="notes-app">
-            <!-- FORM INPUT -->
             <div class="note-input">
-                <input type="text" id="noteTitle" placeholder="Note title" class="note-title">
-                <textarea id="noteContent" placeholder="Note content..." class="note-content"></textarea>
-                <button class="add-note" onclick="addNote()">➕ Add Note</button>
+                <input type="text" placeholder="Note title" class="note-title" id="noteTitle">
+                <textarea placeholder="Note content..." class="note-content" id="noteContent"></textarea>
+                <button class="add-note" id="addNoteBtn">➕ Add Note</button>
             </div>
 
-            <!-- DAFTAR CATATAN -->
             <div class="notes-list" id="notesList">
-                <!-- nanti diisi lewat javascript -->
+                <!-- Notes akan tampil di sini via JavaScript -->
             </div>
         </div>
 
         <footer>
-            <p>© 2026 - Notes App (Simple Version)</p>
+            <p>© 2026 - Notes App (with Local Storage)</p>
         </footer>
     </div>
 
     <script>
-        // Array kosong buat nyimpan catatan
-        let notes = [];
+        // ===== NOTES APP WITH LOCAL STORAGE =====
+        const STORAGE_KEY = 'relaxedNotes';
 
-        // Fungsi buat nampilin catatan
-        function displayNotes() {
-            const list = document.getElementById('notesList');
-            list.innerHTML = ''; // kosongin dulu
+        // Load notes dari localStorage saat halaman dimuat
+        let notes = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
-            for (let i = 0; i < notes.length; i++) {
-                const note = notes[i];
-                list.innerHTML += `
-                    <div class="note-card">
-                        <h3>${note.title}</h3>
-                        <p>${note.content}</p>
-                        <small>${note.date}</small>
-                        <button class="delete-btn" onclick="deleteNote(${i})">🗑️ Hapus</button>
-                    </div>
-                `;
-            }
+        // Fungsi untuk menyimpan notes ke localStorage
+        function saveNotes() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
         }
 
-        // Fungsi buat nambah catatan
-        function addNote() {
-            const title = document.getElementById('noteTitle').value;
-            const content = document.getElementById('noteContent').value;
+        // Fungsi untuk menampilkan notes
+        function renderNotes() {
+            const notesList = document.getElementById('notesList');
+            notesList.innerHTML = '';
 
-            if (title === '' || content === '') {
-                alert('Judul dan isi catatan harus diisi!');
+            if (notes.length === 0) {
+                notesList.innerHTML = '<p style="text-align: center; color: #888; padding: 20px;">No notes yet. Add your first note! 📝</p>';
                 return;
             }
 
-            // Buat object catatan baru
+            notes.forEach((note, index) => {
+                const noteCard = document.createElement('div');
+                noteCard.className = 'note-card';
+                noteCard.innerHTML = `
+                    <h3>${escapeHtml(note.title) || 'Untitled'}</h3>
+                    <p>${escapeHtml(note.content) || '...'}</p>
+                    <small>${note.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</small>
+                    <button class="delete-btn" data-index="${index}">🗑️ Delete</button>
+                `;
+                notesList.appendChild(noteCard);
+            });
+
+            // Tambahkan event listener ke semua tombol delete
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = this.getAttribute('data-index');
+                    deleteNote(index);
+                });
+            });
+        }
+
+        // Fungsi untuk menghindari XSS (escaping HTML)
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Fungsi untuk menambah note baru
+        function addNote() {
+            const titleInput = document.getElementById('noteTitle');
+            const contentInput = document.getElementById('noteContent');
+            
+            const title = titleInput.value.trim();
+            const content = contentInput.value.trim();
+
+            if (!title || !content) {
+                alert('Please fill in both title and content!');
+                return;
+            }
+
             const newNote = {
                 title: title,
                 content: content,
-                date: new Date().toLocaleDateString('id-ID', { 
-                    day: 'numeric', 
+                date: new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric', 
                     month: 'long', 
-                    year: 'numeric' 
+                    day: 'numeric' 
                 })
             };
 
-            // Tambah ke array
             notes.push(newNote);
+            saveNotes();
+            renderNotes();
 
-            // Kosongin input
-            document.getElementById('noteTitle').value = '';
-            document.getElementById('noteContent').value = '';
-
-            // Tampilkan ulang
-            displayNotes();
+            // Kosongkan input
+            titleInput.value = '';
+            contentInput.value = '';
         }
 
-        // Fungsi buat hapus catatan
+        // Fungsi untuk menghapus note
         function deleteNote(index) {
-            notes.splice(index, 1); // hapus dari array
-            displayNotes(); // tampilkan ulang
+            if (confirm('Delete this note?')) {
+                notes.splice(index, 1);
+                saveNotes();
+                renderNotes();
+            }
         }
 
-        // Pas pertama kali buka, langsung tampilkan (masih kosong)
-        displayNotes();
+        // Inisialisasi saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNotes();
+            document.getElementById('addNoteBtn').addEventListener('click', addNote);
+        });
     </script>
 </body>
 </html>
