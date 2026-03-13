@@ -16,22 +16,17 @@ body {
     color: #00ff99;
     max-width: 400px;
     margin: 0 auto;
+    background: #111;
+    padding: 40px;
+    border: 2px solid #00ff99;
+    border-radius: 10px;
 }
 
 .password-prompt h2 {
-    font-size: 1.8em;
+    font-size: 1.5em;
     margin-bottom: 20px;
     border-bottom: 1px solid #00ff99;
     padding-bottom: 10px;
-}
-
-.hidden-label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
 }
 
 .password-input {
@@ -44,11 +39,6 @@ body {
     width: 100%;
     margin-bottom: 15px;
     border-radius: 5px;
-}
-
-.password-input:focus {
-    outline: none;
-    box-shadow: 0 0 10px #00ff99;
 }
 
 .password-btn {
@@ -76,7 +66,7 @@ body {
     background: #111;
     border: 2px solid #00ff99;
     border-radius: 10px;
-    padding: 30px;
+    padding: 20px;
     box-shadow: 0 0 30px rgba(0,255,150,0.2);
 }
 
@@ -84,43 +74,65 @@ body {
     display: none !important;
 }
 
-.ascii {
-    font-size: 0.7em;
-    white-space: pre;
-    line-height: 1.2;
-    color: #00ff99;
-    margin-bottom: 20px;
-}
-
-.welcome {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    color: #fff;
-}
-
-.status {
-    color: #888;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #00ff99;
-    padding-bottom: 10px;
-}
-
-.menu {
+.terminal-header {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.command {
-    background: #1a1a1a;
-    padding: 12px 20px;
-    border-left: 5px solid #00ff99;
-    cursor: pointer;
-    transition: 0.3s;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #00ff99;
     color: #00ff99;
+    margin-bottom: 15px;
 }
 
-.command:hover {
-    background: #00ff99;
-    color: #000;
+.terminal-output {
+    min-height: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    color: #00ff99;
+    font-size: 1em;
+    line-height: 1.5;
+    border: 1px solid #333;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.terminal-output div {
+    margin: 5px 0;
+}
+
+.terminal-input-line {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid #00ff99;
+}
+
+.prompt {
+    color: #00ff99;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.terminal-input {
+    background: transparent;
+    border: none;
+    color: #00ff99;
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    width: 100%;
+    outline: none;
+}
+
+.terminal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-top: 1px solid #333;
+    color: #666;
+    font-size: 0.8em;
+}
+
+#userIndicator {
+    color: #00ff99;
+    font-weight: bold;
 }
