@@ -3,26 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro Games | Asril</title>
-    <link rel="stylesheet" href="games_style.css">
+    <title>🎮 Retro Games Arcade | Asril</title>
+    <link rel="stylesheet" href="games_retro.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="gameboy">
+    <div class="arcade-machine">
+        <!-- HEADER -->
         <div class="screen">
-            <h1>🕹️ ASRIL</h1>
-            <p>Web Developer | Level 21</p>
-            <div class="stats">
-                <div>HP: ■■■■■■■■■■ 100%</div>
-                <div>EXP: ■■■■■■■□□□ 70%</div>
-                <div>MP: ■■■■■□□□□□ 50%</div>
+            <div class="scanline"></div>
+            <h1 class="game-title">🎮 RETRO ARCADE</h1>
+            <p class="game-subtitle">1UP • Insert Coin • Press START</p>
+
+            <!-- MENU GAME -->
+            <div class="game-menu" id="gameMenu">
+                <button class="btn-game" data-game="guess">🎯 01 - GUESS NUMBER</button>
+                <button class="btn-game" data-game="rps">✊ 02 - ROCK PAPER SCISSORS</button>
+                <button class="btn-game" data-game="quiz">🔢 03 - MATH QUIZ</button>
+                <button class="btn-game exit" onclick="location.href='index.html'">🏠 EXIT</button>
+            </div>
+
+            <!-- GAME 1: TEBAK ANGKA -->
+            <div id="gameGuess" class="game-area hidden">
+                <h2>🎯 GUESS THE NUMBER</h2>
+                <p class="game-desc">Guess a number between 1-10</p>
+                <div class="game-display" id="guessDisplay">❓</div>
+                <input type="number" id="guessInput" class="game-input" min="1" max="10" placeholder="1-10">
+                <button class="btn-play" id="guessBtn">GUESS</button>
+                <button class="btn-back" onclick="showMenu()">◀ BACK</button>
+            </div>
+
+            <!-- GAME 2: ROCK PAPER SCISSORS -->
+            <div id="gameRPS" class="game-area hidden">
+                <h2>✊ ROCK PAPER SCISSORS</h2>
+                <p class="game-desc">Choose your move</p>
+                <div class="game-display" id="rpsDisplay">VS</div>
+                <div class="rps-buttons">
+                    <button class="btn-rps" data-move="rock">🪨</button>
+                    <button class="btn-rps" data-move="paper">📄</button>
+                    <button class="btn-rps" data-move="scissors">✂️</button>
+                </div>
+                <button class="btn-play" id="rpsPlay">PLAY</button>
+                <button class="btn-back" onclick="showMenu()">◀ BACK</button>
+            </div>
+
+            <!-- GAME 3: MATH QUIZ -->
+            <div id="gameQuiz" class="game-area hidden">
+                <h2>🔢 MATH QUIZ</h2>
+                <p class="game-desc">Solve the equation</p>
+                <div class="game-display" id="quizDisplay">?</div>
+                <input type="number" id="quizInput" class="game-input" placeholder="Answer">
+                <button class="btn-play" id="quizBtn">CHECK</button>
+                <button class="btn-back" onclick="showMenu()">◀ BACK</button>
+            </div>
+
+            <!-- SCORE & STATS -->
+            <div class="game-stats">
+                <span id="gameScore">🏆 SCORE: 0</span>
+                <span id="gameMessage" class="message"></span>
+                <button onclick="resetScore()" class="reset-btn" title="Reset Score (Admin)">↺</button>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="game-footer">
+                <span>1P • CREDITS: ∞</span>
+                <span>HI-SCORE: 9999</span>
             </div>
         </div>
-        <div class="controls">
-            <a href="hacker.html" class="btn">◀ HACKER</a>
-            <a href="tribute.html" class="btn">TRIBUTE ▶</a>
-            <a href="index.html" class="btn start">🏠 START</a>
-        </div>
-        <div class="footer">1P • SCORE 012345 • HI-SCORE 999999</div>
     </div>
+
+    <!-- SCRIPT EKSTERNAL -->
+    <script src="games_retro.js"></script>
 </body>
 </html>
