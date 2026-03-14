@@ -136,3 +136,27 @@ body {
     color: #00ff99;
     font-weight: bold;
 }
+/* hacker_style.css - Pastikan input bisa diketik */
+.terminal-input {
+    background: transparent;
+    border: none;
+    color: #00ff99;
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    width: 100%;
+    outline: none;
+}
+
+.terminal-input-line {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid #00ff99;
+    background: #0a0a0a;
+}
+
+.prompt {
+    color: #00ff99;
+    margin-right: 10px;
+    font-weight: bold;
+}

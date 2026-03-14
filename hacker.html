@@ -22,14 +22,16 @@
             <span class="terminal-status">[USER: <span id="userIndicator">guest</span>]</span>
         </div>
         
+        <!-- OUTPUT TERMINAL -->
         <div class="terminal-output" id="terminalOutput">
             <div>> System initialized...</div>
             <div>> Type /help for commands</div>
         </div>
 
+        <!-- INPUT LINE -->
         <div class="terminal-input-line">
             <span class="prompt">$</span>
-            <span class="terminal-status">[USER: <span id="userIndicator">guest</span>]</span>
+            <input type="text" id="terminalInput" class="terminal-input" autofocus placeholder="Type command here...">
         </div>
 
         <div class="terminal-footer">
@@ -39,28 +41,25 @@
     </div>
 
     <script>
-        // Fungsi checkPassword untuk verifikasi
         function checkPassword() {
             const input = document.getElementById('passwordInput');
             const password = input.value;
             
-            // Password: 786343
             if (password === '786343') {
                 sessionStorage.setItem('hackerAuth', 'true');
                 document.getElementById('passwordPrompt').classList.add('hidden');
                 document.getElementById('mainContent').classList.remove('hidden');
                 document.getElementById('userIndicator').innerText = 'admin';
                 
-                // Trigger command load
-                if (window.terminalModule && window.terminalModule.loadCommands) {
-                    window.terminalModule.loadCommands();
+                // Trigger terminal siap
+                if (window.initializeTerminal) {
+                    window.initializeTerminal();
                 }
             } else {
                 alert('❌ Access denied. Wrong password.');
             }
         }
 
-        // Cek session saat load
         window.onload = function() {
             if (sessionStorage.getItem('hackerAuth') === 'true') {
                 document.getElementById('passwordPrompt').classList.add('hidden');

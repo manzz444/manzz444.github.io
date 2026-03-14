@@ -1,26 +1,20 @@
-// hacker_terminal.js - Command Center untuk Hacker Terminal
-const ADMIN_PASSWORD = '786343';
+// hacker_terminal.js - BENERAN BISA NGETIK
 let currentUser = 'guest';
 let editMode = false;
 let currentEditPage = '';
 let editBuffer = {};
 
-// Ekspos module ke window
-window.terminalModule = {
-    loadCommands: function() {
-        if (currentUser === 'admin') {
-            showOutput('Welcome Admin. Type /help for commands.');
-        } else {
-            showOutput('Welcome Guest. Limited commands available.');
-        }
-    }
-};
-
 // Inisialisasi terminal
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     checkAuth();
     setupTerminal();
 });
+
+// Fungsi ini dipanggil dari HTML
+window.initializeTerminal = function() {
+    checkAuth();
+    setupTerminal();
+};
 
 function checkAuth() {
     if (sessionStorage.getItem('hackerAuth') === 'true') {
@@ -34,12 +28,17 @@ function setupTerminal() {
     const input = document.getElementById('terminalInput');
     
     if (input) {
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                processCommand(input.value);
-                input.value = '';
-            }
-        });
+        // Hapus event listener lama biar gak dobel
+        input.removeEventListener('keypress', handleCommand);
+        input.addEventListener('keypress', handleCommand);
+    }
+}
+
+function handleCommand(e) {
+    if (e.key === 'Enter') {
+        const input = e.target;
+        processCommand(input.value);
+        input.value = ''; // Kosongkan input
     }
 }
 
@@ -47,6 +46,7 @@ function processCommand(cmd) {
     cmd = cmd.trim().toLowerCase();
     addToHistory(`> ${cmd}`);
 
+    // Daftar perintah
     const commands = {
         '/help': showHelp,
         '/games': () => navigateTo('games_retro.html'),
@@ -74,7 +74,8 @@ function processCommand(cmd) {
 }
 
 function showHelp() {
-    let help = 'Available commands:<br>';
+    let help = '📋 AVAILABLE COMMANDS:<br>';
+    help += '━━━━━━━━━━━━━━━━━━<br>';
     help += '/games - Go to Games Retro<br>';
     help += '/tribute - Go to Tribute Page<br>';
     help += '/dashboard - Go to Dashboard<br>';
@@ -84,6 +85,7 @@ function showHelp() {
 
     if (currentUser === 'admin') {
         help += '<br>🔧 ADMIN COMMANDS:<br>';
+        help += '━━━━━━━━━━━━━━━━━━<br>';
         help += '/edit_tribute - Edit Tribute Page<br>';
         help += '/edit_dashboard - Edit Dashboard<br>';
         help += '/show_edit - Show current edits<br>';
@@ -103,7 +105,9 @@ function showUser() {
 }
 
 function clearTerminal() {
-    document.getElementById('terminalOutput').innerHTML = '';
+    const output = document.getElementById('terminalOutput');
+    if (output) output.innerHTML = '';
+    showOutput('Terminal cleared.');
 }
 
 function addToHistory(text) {
@@ -158,3 +162,10 @@ function showEditBuffer() {
     showOutput(`Current edit buffer for ${currentEditPage}:`);
     showOutput(JSON.stringify(editBuffer, null, 2));
 }
+
+// Ekspos fungsi ke global untuk debugging
+window.terminalCommands = {
+    processCommand,
+    showHelp,
+    clearTerminal
+};
