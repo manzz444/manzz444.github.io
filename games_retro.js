@@ -13,6 +13,8 @@ let socket = null;
 let currentSession = null;
 let isMultiplayer = false;
 let playerName = localStorage.getItem('playerName') || 'Player';
+let reconnectAttempts = 0;
+const MAX_RECONNECT = 3;
 
 // ==================== FUNGSI SKOR ====================
 function saveScore() {
@@ -169,10 +171,14 @@ function checkMath() {
 // ==================== MULTIPLAYER FUNCTIONS ====================
 function resetMultiplayerLobby() {
     // Reset tampilan multiplayer
-    document.getElementById('multiStatus').innerHTML = `
-        <div class="status-line">> Disconnected from server</div>
-        <div class="status-line">> Enter your name and connect</div>
-    `;
+    const statusDiv = document.getElementById('multiStatus');
+    if (statusDiv) {
+        statusDiv.innerHTML = `
+            <div class="status-line">> Disconnected from server</div>
+            <div class="status-line">> Enter your name and connect</div>
+        `;
+    }
+    
     document.getElementById('multiConnectionStatus').innerText = 'NO';
     document.getElementById('multiSessionStatus').innerText = 'NONE';
     document.getElementById('multiSessionControls').classList.add('hidden');
@@ -184,17 +190,41 @@ function resetMultiplayerLobby() {
         socket.disconnect();
         socket = null;
     }
+    reconnectAttempts = 0;
 }
 
 function initMultiplayer() {
-    if (socket) return;
+    if (socket) {
+        addMultiStatus('⚠️ Already connected or connecting...', 'info');
+        return;
+    }
     
-    socket = io('http://localhost:3001');
+    addMultiStatus('🔄 Connecting to server...', 'info');
+    
+    // Gunakan 127.0.0.1 bukan localhost untuk menghindari DNS issue
+    socket = io('http://127.0.0.1:3001', {
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        timeout: 10000
+    });
 
     socket.on('connect', () => {
         addMultiStatus('✅ Connected to server', 'success');
         document.getElementById('multiConnectionStatus').innerText = 'YES';
         document.getElementById('multiSessionControls').classList.remove('hidden');
+        reconnectAttempts = 0;
+    });
+
+    socket.on('connect_error', (err) => {
+        addMultiStatus(`❌ Connection error: ${err.message}`, 'error');
+        reconnectAttempts++;
+        
+        if (reconnectAttempts >= MAX_RECONNECT) {
+            addMultiStatus('❌ Failed to connect after multiple attempts', 'error');
+            socket.disconnect();
+            socket = null;
+        }
     });
 
     socket.on('session-created', (data) => {
@@ -225,23 +255,39 @@ function initMultiplayer() {
         addMultiStatus(`❌ ${data.message}`, 'error');
     });
 
-    socket.on('disconnect', () => {
-        addMultiStatus('🔴 Disconnected from server', 'error');
+    socket.on('disconnect', (reason) => {
+        addMultiStatus(`🔴 Disconnected: ${reason}`, 'error');
         document.getElementById('multiConnectionStatus').innerText = 'NO';
         document.getElementById('multiSessionControls').classList.add('hidden');
         document.getElementById('multiPlayersList').classList.add('hidden');
         document.getElementById('multiStartGameBtn').classList.add('hidden');
+        
+        if (reason === 'io server disconnect') {
+            // Server initiated disconnect, jangan reconnect otomatis
+            socket = null;
+        }
     });
 }
 
 function addMultiStatus(message, type) {
     const statusDiv = document.getElementById('multiStatus');
+    if (!statusDiv) return;
+    
     const line = document.createElement('div');
     line.className = 'status-line';
     line.innerHTML = `> ${message}`;
-    line.style.color = type === 'error' ? '#ff6b6b' : (type === 'success' ? '#00ff99' : '#888');
+    
+    if (type === 'error') line.style.color = '#ff6b6b';
+    else if (type === 'success') line.style.color = '#00ff99';
+    else line.style.color = '#888';
+    
     statusDiv.appendChild(line);
     statusDiv.scrollTop = statusDiv.scrollHeight;
+    
+    // Batasi jumlah status lines (optional)
+    if (statusDiv.children.length > 8) {
+        statusDiv.removeChild(statusDiv.children[0]);
+    }
 }
 
 function updateMultiPlayersList(players) {
@@ -323,8 +369,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Create session
     document.getElementById('multiCreateBtn')?.addEventListener('click', () => {
-        if (!socket) {
-            addMultiStatus('❌ Connect to server first', 'error');
+        if (!socket || !socket.connected) {
+            addMultiStatus('❌ Not connected to server', 'error');
             return;
         }
         socket.emit('create-session', { gameId: 4, playerName });
@@ -332,13 +378,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Join session
     document.getElementById('multiJoinBtn')?.addEventListener('click', () => {
-        const code = document.getElementById('multiSessionCode').value.trim();
+        const code = document.getElementById('multiSessionCode').value.trim().toUpperCase();
         if (!code) {
             addMultiStatus('❌ Enter session code', 'error');
             return;
         }
-        if (!socket) {
-            addMultiStatus('❌ Connect to server first', 'error');
+        if (!socket || !socket.connected) {
+            addMultiStatus('❌ Not connected to server', 'error');
             return;
         }
         socket.emit('join-session', { sessionCode: code, playerName });
@@ -348,6 +394,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('multiStartGameBtn')?.addEventListener('click', () => {
         if (!currentSession) {
             addMultiStatus('❌ No active session', 'error');
+            return;
+        }
+        if (!socket || !socket.connected) {
+            addMultiStatus('❌ Not connected to server', 'error');
             return;
         }
         socket.emit('start-game', { sessionCode: currentSession });
