@@ -202,7 +202,7 @@ function initMultiplayer() {
     addMultiStatus('🔄 Connecting to server...', 'info');
     
     // Gunakan 127.0.0.1 bukan localhost untuk menghindari DNS issue
-    socket = io('http://127.0.0.1:3001', {
+    socket = io('http://localhost:3001', {
         reconnection: true,
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
