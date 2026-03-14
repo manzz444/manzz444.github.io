@@ -170,7 +170,6 @@ function checkMath() {
 
 // ==================== MULTIPLAYER FUNCTIONS ====================
 function resetMultiplayerLobby() {
-    // Reset tampilan multiplayer
     const statusDiv = document.getElementById('multiStatus');
     if (statusDiv) {
         statusDiv.innerHTML = `
@@ -206,36 +205,13 @@ function initMultiplayer() {
     
     addMultiStatus('🔄 Connecting to server...', 'info');
     
-    // Coba kedua URL untuk antisipasi
-    const serverUrl = 'http://localhost:3001';
-    
-    socket = io(serverUrl, {
+    socket = io('http://localhost:3001', {
         reconnection: true,
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
         timeout: 10000,
-        transports: ['polling', 'websocket'] // Prioritaskan polling dulu
+        transports: ['polling', 'websocket']
     });
-
-    socket.on('connect', () => {
-        addMultiStatus('✅ Connected to server', 'success');
-        document.getElementById('multiConnectionStatus').innerText = 'YES';
-        document.getElementById('multiSessionControls').classList.remove('hidden');
-    });
-
-    socket.on('connect_error', (err) => {
-        addMultiStatus(`❌ Connection error: ${err.message}`, 'error');
-        console.error('Socket connect error:', err);
-        
-        // Coba dengan transport websocket saja
-        if (socket.io.opts.transports[0] === 'polling') {
-            addMultiStatus('🔄 Switching to websocket...', 'info');
-            socket.io.opts.transports = ['websocket'];
-        }
-    });
-
-    // ... sisanya tetap sama
-}
 
     socket.on('connect', () => {
         addMultiStatus('✅ Connected to server', 'success');
@@ -291,7 +267,6 @@ function initMultiplayer() {
         document.getElementById('multiStartGameBtn').classList.add('hidden');
         
         if (reason === 'io server disconnect') {
-            // Server initiated disconnect, jangan reconnect otomatis
             socket = null;
         }
     });
@@ -312,7 +287,6 @@ function addMultiStatus(message, type) {
     statusDiv.appendChild(line);
     statusDiv.scrollTop = statusDiv.scrollHeight;
     
-    // Batasi jumlah status lines (optional)
     if (statusDiv.children.length > 8) {
         statusDiv.removeChild(statusDiv.children[0]);
     }
@@ -348,23 +322,19 @@ function cheatReset() {
 
 // ==================== EVENT LISTENERS ====================
 document.addEventListener('DOMContentLoaded', () => {
-    // Update skor
     updateScore();
 
-    // Menu games (SEMUA dari HTML)
     document.querySelectorAll('.btn-game[data-game]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             showGame(e.target.dataset.game);
         });
     });
 
-    // Game 1: Tebak Angka
     document.getElementById('guessBtn')?.addEventListener('click', checkGuess);
     document.getElementById('guessInput')?.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') checkGuess();
     });
 
-    // Game 2: RPS
     document.querySelectorAll('.btn-rps').forEach(btn => {
         btn.addEventListener('click', (e) => {
             playRPS(e.target.dataset.move);
@@ -375,15 +345,12 @@ document.addEventListener('DOMContentLoaded', () => {
         playRPS(random);
     });
 
-    // Game 3: Math Quiz
     document.getElementById('quizBtn')?.addEventListener('click', checkMath);
     document.getElementById('quizInput')?.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') checkMath();
     });
 
     // ===== MULTIPLAYER EVENT LISTENERS =====
-    
-    // Connect to server
     document.getElementById('multiConnectBtn')?.addEventListener('click', () => {
         const name = document.getElementById('multiPlayerName').value.trim();
         if (!name) {
@@ -395,7 +362,6 @@ document.addEventListener('DOMContentLoaded', () => {
         initMultiplayer();
     });
 
-    // Create session
     document.getElementById('multiCreateBtn')?.addEventListener('click', () => {
         if (!socket || !socket.connected) {
             addMultiStatus('❌ Not connected to server', 'error');
@@ -404,7 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('create-session', { gameId: 4, playerName });
     });
 
-    // Join session
     document.getElementById('multiJoinBtn')?.addEventListener('click', () => {
         const code = document.getElementById('multiSessionCode').value.trim().toUpperCase();
         if (!code) {
@@ -418,7 +383,6 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('join-session', { sessionCode: code, playerName });
     });
 
-    // Start game
     document.getElementById('multiStartGameBtn')?.addEventListener('click', () => {
         if (!currentSession) {
             addMultiStatus('❌ No active session', 'error');
@@ -431,16 +395,13 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('start-game', { sessionCode: currentSession });
     });
 
-    // Multiplayer battle buttons
     document.getElementById('multiSendMove')?.addEventListener('click', () => {
-        // Logic untuk kirim move ke server
         addMultiStatus('Move sent!', 'success');
     });
 
     console.log('🎮 Retro Games loaded! Type cheatReset() to reset score.');
 });
 
-// ==================== EKSPOR FUNGSI GLOBAL ====================
 window.cheatReset = cheatReset;
 window.resetScore = resetScore;
 window.showMenu = showMenu;
