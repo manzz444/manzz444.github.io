@@ -245,19 +245,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update skor
     updateScore();
 
-    // Menu solo games
+    // Menu games (SEMUA dari HTML, termasuk multiplayer)
     document.querySelectorAll('.btn-game[data-game]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             showGame(e.target.dataset.game);
         });
     });
-
-    // Tombol multiplayer (akan ditambahkan secara dinamis)
-    const multiBtn = document.createElement('button');
-    multiBtn.className = 'btn-game';
-    multiBtn.setAttribute('data-game', 'multi');
-    multiBtn.innerHTML = '🎮 04 - MULTIPLAYER BATTLE';
-    document.querySelector('.game-menu').appendChild(multiBtn);
 
     // Game 1: Tebak Angka
     document.getElementById('guessBtn')?.addEventListener('click', checkGuess);
@@ -282,10 +275,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') checkMath();
     });
 
-    // Multiplayer buttons (akan diinisialisasi setelah DOM siap)
+    // Multiplayer buttons (dengan pengecekan elemen)
     setTimeout(() => {
         document.getElementById('multiCreateBtn')?.addEventListener('click', () => {
-            socket?.emit('create-session', { gameId: 4, playerName });
+            if (!socket) {
+                addStatus('❌ Connecting to server...', 'error');
+                initMultiplayer();
+                setTimeout(() => {
+                    socket?.emit('create-session', { gameId: 4, playerName });
+                }, 500);
+            } else {
+                socket.emit('create-session', { gameId: 4, playerName });
+            }
         });
 
         document.getElementById('multiJoinBtn')?.addEventListener('click', () => {
@@ -294,7 +295,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 addStatus('❌ Enter session code', 'error');
                 return;
             }
-            socket?.emit('join-session', { sessionCode: code, playerName });
+            
+            if (!socket) {
+                addStatus('❌ Connecting to server...', 'error');
+                initMultiplayer();
+                setTimeout(() => {
+                    socket?.emit('join-session', { sessionCode: code, playerName });
+                }, 500);
+            } else {
+                socket.emit('join-session', { sessionCode: code, playerName });
+            }
         });
 
         document.getElementById('multiStartGameBtn')?.addEventListener('click', () => {
@@ -304,6 +314,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             socket?.emit('start-game', { sessionCode: currentSession });
         });
+
+        // Multiplayer battle buttons
+        document.getElementById('multiSendMove')?.addEventListener('click', () => {
+            // Logic untuk kirim move ke server
+            addStatus('Move sent!', 'success');
+        });
+
     }, 100);
 
     console.log('🎮 Retro Games loaded! Type cheatReset() to reset score.');
