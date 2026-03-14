@@ -3,6 +3,7 @@ let currentUser = 'guest';
 let editMode = false;
 let currentEditPage = '';
 let editBuffer = {};
+let loginMode = false; // Flag untuk mode login
 
 // Password
 const ADMIN_PASSWORD = '786343';
@@ -33,19 +34,19 @@ function updateFooter() {
 }
 
 function checkAuth() {
-    if (sessionStorage.getItem('hackerAuth') === 'true') {
+    const adminAuth = sessionStorage.getItem('hackerAuth');
+    const guestAuth = sessionStorage.getItem('guestAuth');
+    
+    if (adminAuth === 'true') {
         currentUser = 'admin';
-        const indicator = document.getElementById('userIndicator');
-        if (indicator) indicator.innerText = 'admin';
-    } else if (sessionStorage.getItem('guestAuth') === 'true') {
+    } else if (guestAuth === 'true') {
         currentUser = 'guest';
-        const indicator = document.getElementById('userIndicator');
-        if (indicator) indicator.innerText = 'guest';
     } else {
         currentUser = 'guest';
-        const indicator = document.getElementById('userIndicator');
-        if (indicator) indicator.innerText = 'guest';
     }
+    
+    const indicator = document.getElementById('userIndicator');
+    if (indicator) indicator.innerText = currentUser;
 }
 
 function setupTerminal() {
@@ -61,54 +62,129 @@ function setupTerminal() {
 function handleCommand(e) {
     if (e.key === 'Enter') {
         const input = e.target;
-        processCommand(input.value);
+        const command = input.value.trim();
+        
+        // Jika dalam mode login, proses password
+        if (loginMode) {
+            processLogin(command);
+        } else {
+            processCommand(command);
+        }
+        
         input.value = ''; // Kosongkan input
     }
 }
 
+function processLogin(password) {
+    loginMode = false;
+    
+    if (password === ADMIN_PASSWORD) {
+        sessionStorage.setItem('hackerAuth', 'true');
+        sessionStorage.removeItem('guestAuth');
+        currentUser = 'admin';
+        document.getElementById('userIndicator').innerText = 'admin';
+        showOutput('✅ Admin login successful. Welcome!');
+    } else if (password === GUEST_PASSWORD) {
+        sessionStorage.setItem('guestAuth', 'true');
+        sessionStorage.removeItem('hackerAuth');
+        currentUser = 'guest';
+        document.getElementById('userIndicator').innerText = 'guest';
+        showOutput('👋 Guest login successful. Limited access.');
+    } else {
+        showOutput('❌ Wrong password. Access denied.');
+    }
+    
+    updateFooter();
+    setupTerminal();
+}
+
 function processCommand(cmd) {
+    if (!cmd) return;
+    
     cmd = cmd.trim().toLowerCase();
     addToHistory(`> ${cmd}`);
 
-    // Perintah untuk semua user
-    const guestCommands = {
-        '/help': showGuestHelp,
-        '/games': () => navigateTo('games_retro.html'),
-        '/tribute': () => navigateTo('tribute.html'),
-        '/dashboard': () => navigateTo('dashboard.html'),
-        '/q': () => navigateTo('../index.html'),
-        '/clear': clearTerminal,
-        '/whoami': () => showOutput(`Current user: ${currentUser}`),
-        '/login': showLoginPrompt
-    };
-
-    // Perintah khusus admin
-    const adminCommands = {
-        '/help': showAdminHelp,
-        '/edit_tribute': () => startEdit('tribute'),
-        '/edit_dashboard': () => startEdit('dashboard'),
-        '/show_edit': showEditBuffer,
-        '/commit_edit': commitEdit,
-        '/cancel_edit': cancelEdit,
-        '/logout': logout
-    };
-
-    // Jalankan perintah berdasarkan user
-    if (currentUser === 'admin') {
-        if (adminCommands[cmd]) {
-            adminCommands[cmd]();
-        } else if (guestCommands[cmd]) {
-            guestCommands[cmd]();
+    // Perintah dasar untuk semua user
+    if (cmd === '/help') {
+        if (currentUser === 'admin') {
+            showAdminHelp();
         } else {
-            showOutput(`Command not recognized: ${cmd}`);
+            showGuestHelp();
         }
-    } else {
-        if (guestCommands[cmd]) {
-            guestCommands[cmd]();
-        } else {
-            showOutput(`Command not recognized: ${cmd}`);
+        return;
+    }
+    
+    if (cmd === '/games') {
+        navigateTo('games_retro.html');
+        return;
+    }
+    
+    if (cmd === '/tribute') {
+        navigateTo('tribute.html');
+        return;
+    }
+    
+    if (cmd === '/dashboard') {
+        navigateTo('dashboard.html');
+        return;
+    }
+    
+    if (cmd === '/q') {
+        navigateTo('../index.html');
+        return;
+    }
+    
+    if (cmd === '/clear') {
+        clearTerminal();
+        return;
+    }
+    
+    if (cmd === '/whoami') {
+        showOutput(`Current user: ${currentUser}`);
+        return;
+    }
+    
+    if (cmd === '/login') {
+        showOutput('🔒 Enter password: (type it and press Enter)');
+        loginMode = true;
+        return;
+    }
+    
+    // Perintah khusus admin
+    if (currentUser === 'admin') {
+        if (cmd === '/logout') {
+            logout();
+            return;
+        }
+        
+        if (cmd === '/edit_tribute') {
+            startEdit('tribute');
+            return;
+        }
+        
+        if (cmd === '/edit_dashboard') {
+            startEdit('dashboard');
+            return;
+        }
+        
+        if (cmd === '/show_edit') {
+            showEditBuffer();
+            return;
+        }
+        
+        if (cmd === '/commit_edit') {
+            commitEdit();
+            return;
+        }
+        
+        if (cmd === '/cancel_edit') {
+            cancelEdit();
+            return;
         }
     }
+    
+    // Kalau gak ada perintah yang cocok
+    showOutput(`Command not recognized: ${cmd}`);
 }
 
 function showGuestHelp() {
@@ -141,41 +217,6 @@ function showAdminHelp() {
     help += '/commit_edit - Save all edits<br>';
     help += '/cancel_edit - Cancel edits<br>';
     showOutput(help);
-}
-
-function showLoginPrompt() {
-    showOutput('🔒 Enter password: (type it and press Enter)');
-    
-    const input = document.getElementById('terminalInput');
-    input.removeEventListener('keypress', handleCommand);
-    
-    input.addEventListener('keypress', function loginHandler(e) {
-        if (e.key === 'Enter') {
-            const password = e.target.value.trim();
-            
-            if (password === ADMIN_PASSWORD) {
-                sessionStorage.setItem('hackerAuth', 'true');
-                sessionStorage.removeItem('guestAuth');
-                currentUser = 'admin';
-                document.getElementById('userIndicator').innerText = 'admin';
-                showOutput('✅ Admin login successful. Welcome!');
-                updateFooter();
-                setupTerminal();
-            } else if (password === GUEST_PASSWORD) {
-                sessionStorage.setItem('guestAuth', 'true');
-                sessionStorage.removeItem('hackerAuth');
-                currentUser = 'guest';
-                document.getElementById('userIndicator').innerText = 'guest';
-                showOutput('👋 Guest login successful. Limited access.');
-                updateFooter();
-                setupTerminal();
-            } else {
-                showOutput('❌ Wrong password. Access denied.');
-                setupTerminal();
-            }
-            e.target.value = '';
-        }
-    });
 }
 
 function logout() {
