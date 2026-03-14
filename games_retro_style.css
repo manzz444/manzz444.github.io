@@ -1,4 +1,4 @@
-/* games_retro.css */
+/* games_retro.css - Complete Retro Arcade Style */
 * {
     margin: 0;
     padding: 0;
@@ -206,11 +206,6 @@ body {
     display: none !important;
 }
 
-@media (max-width: 600px) {
-    .game-title { font-size: 1em; }
-    .btn-game { font-size: 0.6em; }
-    .game-display { font-size: 1.5em; padding: 20px; }
-}
 .reset-btn {
     background: transparent;
     color: #e94560;
@@ -229,7 +224,8 @@ body {
     background: #e94560;
     color: white;
 }
-/* MULTIPLAYER STYLES */
+
+/* ===== MULTIPLAYER STYLES ===== */
 .multiplayer-controls {
     display: flex;
     gap: 15px;
@@ -294,4 +290,48 @@ body {
     display: flex;
     gap: 15px;
     margin-top: 20px;
+}
+
+#multiConnectBtn {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.multi-status {
+    background: #1a1a1a;
+    border: 2px solid #0f3460;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    min-height: 80px;
+    font-size: 0.7em;
+    text-align: left;
+    overflow-y: auto;
+}
+
+.status-line {
+    margin: 5px 0;
+    color: #888;
+}
+
+.multi-footer {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #0f3460;
+    font-size: 0.6em;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+}
+
+.status-value {
+    color: #00ff99;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .game-title { font-size: 1em; }
+    .btn-game { font-size: 0.6em; }
+    .game-display { font-size: 1.5em; padding: 20px; }
+    .multiplayer-controls { flex-direction: column; }
 }

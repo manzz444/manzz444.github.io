@@ -64,15 +64,34 @@
                 <h2>🎮 MULTIPLAYER BATTLE</h2>
                 <p class="game-desc">Create or join a session to battle friends!</p>
                 
-                <div class="multiplayer-controls">
-                    <button id="multiCreateBtn" class="btn-multi">➕ CREATE SESSION</button>
-                    <button id="multiJoinBtn" class="btn-multi">🔑 JOIN SESSION</button>
+                <!-- Status koneksi -->
+                <div class="multi-status" id="multiStatus">
+                    <div class="status-line">> Disconnected from server</div>
+                    <div class="status-line">> Enter your name and connect</div>
                 </div>
 
+                <!-- Player Name Input -->
                 <div class="input-group">
-                    <input type="text" id="multiSessionCode" class="game-input" placeholder="Enter session code">
+                    <label for="multiPlayerName" class="input-label">👤 Your Name</label>
+                    <input type="text" id="multiPlayerName" class="game-input" placeholder="Enter your name" value="Player">
                 </div>
 
+                <!-- Connect Button -->
+                <button id="multiConnectBtn" class="btn-multi">🔌 Connect to Server</button>
+
+                <!-- Session Controls (hidden until connected) -->
+                <div id="multiSessionControls" class="hidden">
+                    <div class="multiplayer-controls">
+                        <button id="multiCreateBtn" class="btn-multi">➕ CREATE SESSION</button>
+                        <button id="multiJoinBtn" class="btn-multi">🔑 JOIN SESSION</button>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" id="multiSessionCode" class="game-input" placeholder="Enter session code">
+                    </div>
+                </div>
+
+                <!-- Players List -->
                 <div id="multiPlayersList" class="players-list hidden">
                     <h3>👥 Players in room:</h3>
                     <div id="multiPlayersContainer"></div>
@@ -81,6 +100,12 @@
                 <div class="multiplayer-actions">
                     <button id="multiStartGameBtn" class="btn-multi start hidden">🎮 START GAME</button>
                     <button class="btn-multi back" onclick="showMenu()">◀ BACK</button>
+                </div>
+
+                <!-- Connection Status Footer -->
+                <div class="multi-footer">
+                    [CONNECTED: <span id="multiConnectionStatus" class="status-value">NO</span>] 
+                    [SESSION: <span id="multiSessionStatus" class="status-value">NONE</span>]
                 </div>
             </div>
 

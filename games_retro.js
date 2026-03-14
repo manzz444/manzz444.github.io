@@ -63,7 +63,7 @@ function showGame(game) {
             break;
         case 'multi':
             document.getElementById('gameMultiLobby').classList.remove('hidden');
-            if (!socket) initMultiplayer();
+            resetMultiplayerLobby();
             break;
         default:
             showMenu();
@@ -166,53 +166,85 @@ function checkMath() {
     updateScore();
 }
 
-// ==================== MULTIPLAYER (GAME 4) ====================
+// ==================== MULTIPLAYER FUNCTIONS ====================
+function resetMultiplayerLobby() {
+    // Reset tampilan multiplayer
+    document.getElementById('multiStatus').innerHTML = `
+        <div class="status-line">> Disconnected from server</div>
+        <div class="status-line">> Enter your name and connect</div>
+    `;
+    document.getElementById('multiConnectionStatus').innerText = 'NO';
+    document.getElementById('multiSessionStatus').innerText = 'NONE';
+    document.getElementById('multiSessionControls').classList.add('hidden');
+    document.getElementById('multiPlayersList').classList.add('hidden');
+    document.getElementById('multiStartGameBtn').classList.add('hidden');
+    document.getElementById('multiPlayerName').value = localStorage.getItem('playerName') || 'Player';
+    
+    if (socket) {
+        socket.disconnect();
+        socket = null;
+    }
+}
+
 function initMultiplayer() {
     if (socket) return;
     
     socket = io('http://localhost:3001');
 
     socket.on('connect', () => {
-        addStatus('✅ Connected to server', 'success');
+        addMultiStatus('✅ Connected to server', 'success');
+        document.getElementById('multiConnectionStatus').innerText = 'YES';
+        document.getElementById('multiSessionControls').classList.remove('hidden');
     });
 
     socket.on('session-created', (data) => {
         currentSession = data.sessionCode;
         document.getElementById('multiSessionCode').value = data.sessionCode;
-        addStatus(`✅ Session created: ${data.sessionCode}`, 'success');
+        document.getElementById('multiSessionStatus').innerText = data.sessionCode;
+        addMultiStatus(`✅ Session created: ${data.sessionCode}`, 'success');
         document.getElementById('multiPlayersList').classList.remove('hidden');
         document.getElementById('multiStartGameBtn').classList.remove('hidden');
     });
 
     socket.on('player-joined', (data) => {
-        addStatus(`👤 ${data.message}`, 'info');
-        updatePlayersList(data.players);
+        addMultiStatus(`👤 ${data.message}`, 'info');
+        updateMultiPlayersList(data.players);
     });
 
     socket.on('game-started', (data) => {
-        addStatus(`🎮 Game started!`, 'success');
+        addMultiStatus(`🎮 Game started!`, 'success');
         startMultiplayerGame(data.players);
     });
 
     socket.on('player-left', (data) => {
-        addStatus(`👋 ${data.message}`, 'info');
-        updatePlayersList(data.players);
+        addMultiStatus(`👋 ${data.message}`, 'info');
+        updateMultiPlayersList(data.players);
     });
 
     socket.on('error', (data) => {
-        addStatus(`❌ ${data.message}`, 'error');
+        addMultiStatus(`❌ ${data.message}`, 'error');
+    });
+
+    socket.on('disconnect', () => {
+        addMultiStatus('🔴 Disconnected from server', 'error');
+        document.getElementById('multiConnectionStatus').innerText = 'NO';
+        document.getElementById('multiSessionControls').classList.add('hidden');
+        document.getElementById('multiPlayersList').classList.add('hidden');
+        document.getElementById('multiStartGameBtn').classList.add('hidden');
     });
 }
 
-function addStatus(message, type) {
-    const msgEl = document.getElementById('gameMessage');
-    if (msgEl) {
-        msgEl.innerText = message;
-        msgEl.style.color = type === 'error' ? '#ff6b6b' : '#00ff99';
-    }
+function addMultiStatus(message, type) {
+    const statusDiv = document.getElementById('multiStatus');
+    const line = document.createElement('div');
+    line.className = 'status-line';
+    line.innerHTML = `> ${message}`;
+    line.style.color = type === 'error' ? '#ff6b6b' : (type === 'success' ? '#00ff99' : '#888');
+    statusDiv.appendChild(line);
+    statusDiv.scrollTop = statusDiv.scrollHeight;
 }
 
-function updatePlayersList(players) {
+function updateMultiPlayersList(players) {
     const container = document.getElementById('multiPlayersContainer');
     if (!container) return;
     
@@ -226,7 +258,7 @@ function startMultiplayerGame(players) {
     isMultiplayer = true;
     hideAllGames();
     document.getElementById('gameMultiBattle').classList.remove('hidden');
-    // Di sini nanti logic game multiplayer-nya
+    addMultiStatus(`🎮 Battle started with ${players.length} players!`, 'success');
 }
 
 // ==================== CHEAT / ADMIN ====================
@@ -245,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update skor
     updateScore();
 
-    // Menu games (SEMUA dari HTML, termasuk multiplayer)
+    // Menu games (SEMUA dari HTML)
     document.querySelectorAll('.btn-game[data-game]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             showGame(e.target.dataset.game);
@@ -275,53 +307,57 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') checkMath();
     });
 
-    // Multiplayer buttons (dengan pengecekan elemen)
-    setTimeout(() => {
-        document.getElementById('multiCreateBtn')?.addEventListener('click', () => {
-            if (!socket) {
-                addStatus('❌ Connecting to server...', 'error');
-                initMultiplayer();
-                setTimeout(() => {
-                    socket?.emit('create-session', { gameId: 4, playerName });
-                }, 500);
-            } else {
-                socket.emit('create-session', { gameId: 4, playerName });
-            }
-        });
+    // ===== MULTIPLAYER EVENT LISTENERS =====
+    
+    // Connect to server
+    document.getElementById('multiConnectBtn')?.addEventListener('click', () => {
+        const name = document.getElementById('multiPlayerName').value.trim();
+        if (!name) {
+            addMultiStatus('❌ Please enter your name', 'error');
+            return;
+        }
+        playerName = name;
+        localStorage.setItem('playerName', name);
+        initMultiplayer();
+    });
 
-        document.getElementById('multiJoinBtn')?.addEventListener('click', () => {
-            const code = document.getElementById('multiSessionCode')?.value.trim();
-            if (!code) {
-                addStatus('❌ Enter session code', 'error');
-                return;
-            }
-            
-            if (!socket) {
-                addStatus('❌ Connecting to server...', 'error');
-                initMultiplayer();
-                setTimeout(() => {
-                    socket?.emit('join-session', { sessionCode: code, playerName });
-                }, 500);
-            } else {
-                socket.emit('join-session', { sessionCode: code, playerName });
-            }
-        });
+    // Create session
+    document.getElementById('multiCreateBtn')?.addEventListener('click', () => {
+        if (!socket) {
+            addMultiStatus('❌ Connect to server first', 'error');
+            return;
+        }
+        socket.emit('create-session', { gameId: 4, playerName });
+    });
 
-        document.getElementById('multiStartGameBtn')?.addEventListener('click', () => {
-            if (!currentSession) {
-                addStatus('❌ No active session', 'error');
-                return;
-            }
-            socket?.emit('start-game', { sessionCode: currentSession });
-        });
+    // Join session
+    document.getElementById('multiJoinBtn')?.addEventListener('click', () => {
+        const code = document.getElementById('multiSessionCode').value.trim();
+        if (!code) {
+            addMultiStatus('❌ Enter session code', 'error');
+            return;
+        }
+        if (!socket) {
+            addMultiStatus('❌ Connect to server first', 'error');
+            return;
+        }
+        socket.emit('join-session', { sessionCode: code, playerName });
+    });
 
-        // Multiplayer battle buttons
-        document.getElementById('multiSendMove')?.addEventListener('click', () => {
-            // Logic untuk kirim move ke server
-            addStatus('Move sent!', 'success');
-        });
+    // Start game
+    document.getElementById('multiStartGameBtn')?.addEventListener('click', () => {
+        if (!currentSession) {
+            addMultiStatus('❌ No active session', 'error');
+            return;
+        }
+        socket.emit('start-game', { sessionCode: currentSession });
+    });
 
-    }, 100);
+    // Multiplayer battle buttons
+    document.getElementById('multiSendMove')?.addEventListener('click', () => {
+        // Logic untuk kirim move ke server
+        addMultiStatus('Move sent!', 'success');
+    });
 
     console.log('🎮 Retro Games loaded! Type cheatReset() to reset score.');
 });
