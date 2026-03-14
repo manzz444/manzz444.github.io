@@ -9,21 +9,23 @@
 </head>
 <body>
     <div class="arcade-machine">
-        <!-- HEADER -->
         <div class="screen">
             <div class="scanline"></div>
+            
+            <!-- HEADER -->
             <h1 class="game-title">🎮 RETRO ARCADE</h1>
             <p class="game-subtitle">1UP • Insert Coin • Press START</p>
 
-            <!-- MENU GAME -->
+            <!-- ===== MENU UTAMA ===== -->
             <div class="game-menu" id="gameMenu">
                 <button class="btn-game" data-game="guess">🎯 01 - GUESS NUMBER</button>
                 <button class="btn-game" data-game="rps">✊ 02 - ROCK PAPER SCISSORS</button>
                 <button class="btn-game" data-game="quiz">🔢 03 - MATH QUIZ</button>
+                <button class="btn-game" data-game="multi">🎮 04 - MULTIPLAYER BATTLE</button>
                 <button class="btn-game exit" onclick="location.href='index.html'">🏠 EXIT</button>
             </div>
 
-            <!-- GAME 1: TEBAK ANGKA -->
+            <!-- ===== GAME 1: TEBAK ANGKA ===== -->
             <div id="gameGuess" class="game-area hidden">
                 <h2>🎯 GUESS THE NUMBER</h2>
                 <p class="game-desc">Guess a number between 1-10</p>
@@ -33,7 +35,7 @@
                 <button class="btn-back" onclick="showMenu()">◀ BACK</button>
             </div>
 
-            <!-- GAME 2: ROCK PAPER SCISSORS -->
+            <!-- ===== GAME 2: ROCK PAPER SCISSORS ===== -->
             <div id="gameRPS" class="game-area hidden">
                 <h2>✊ ROCK PAPER SCISSORS</h2>
                 <p class="game-desc">Choose your move</p>
@@ -47,7 +49,7 @@
                 <button class="btn-back" onclick="showMenu()">◀ BACK</button>
             </div>
 
-            <!-- GAME 3: MATH QUIZ -->
+            <!-- ===== GAME 3: MATH QUIZ ===== -->
             <div id="gameQuiz" class="game-area hidden">
                 <h2>🔢 MATH QUIZ</h2>
                 <p class="game-desc">Solve the equation</p>
@@ -57,14 +59,55 @@
                 <button class="btn-back" onclick="showMenu()">◀ BACK</button>
             </div>
 
-            <!-- SCORE & STATS -->
+            <!-- ===== GAME 4: MULTIPLAYER LOBBY ===== -->
+            <div id="gameMultiLobby" class="game-area hidden">
+                <h2>🎮 MULTIPLAYER BATTLE</h2>
+                <p class="game-desc">Create or join a session to battle friends!</p>
+                
+                <div class="multiplayer-controls">
+                    <button id="multiCreateBtn" class="btn-multi">➕ CREATE SESSION</button>
+                    <button id="multiJoinBtn" class="btn-multi">🔑 JOIN SESSION</button>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" id="multiSessionCode" class="game-input" placeholder="Enter session code">
+                </div>
+
+                <div id="multiPlayersList" class="players-list hidden">
+                    <h3>👥 Players in room:</h3>
+                    <div id="multiPlayersContainer"></div>
+                </div>
+
+                <div class="multiplayer-actions">
+                    <button id="multiStartGameBtn" class="btn-multi start hidden">🎮 START GAME</button>
+                    <button class="btn-multi back" onclick="showMenu()">◀ BACK</button>
+                </div>
+            </div>
+
+            <!-- ===== GAME 4B: MULTIPLAYER BATTLE (SETELAH START) ===== -->
+            <div id="gameMultiBattle" class="game-area hidden">
+                <h2>⚔️ MULTIPLAYER BATTLE</h2>
+                <p class="game-desc">VS mode - Fight!</p>
+                <div class="game-display" id="multiBattleDisplay">READY?</div>
+                
+                <div class="rps-buttons">
+                    <button class="btn-rps" data-move="rock" id="multiRock">🪨</button>
+                    <button class="btn-rps" data-move="paper" id="multiPaper">📄</button>
+                    <button class="btn-rps" data-move="scissors" id="multiScissors">✂️</button>
+                </div>
+                
+                <button class="btn-play" id="multiSendMove">SEND MOVE</button>
+                <button class="btn-back" onclick="showMenu()">◀ BACK TO MENU</button>
+            </div>
+
+            <!-- ===== SCORE & STATS ===== -->
             <div class="game-stats">
                 <span id="gameScore">🏆 SCORE: 0</span>
                 <span id="gameMessage" class="message"></span>
                 <button onclick="resetScore()" class="reset-btn" title="Reset Score (Admin)">↺</button>
             </div>
 
-            <!-- FOOTER -->
+            <!-- ===== FOOTER ===== -->
             <div class="game-footer">
                 <span>1P • CREDITS: ∞</span>
                 <span>HI-SCORE: 9999</span>
@@ -72,7 +115,9 @@
         </div>
     </div>
 
-    <!-- SCRIPT EKSTERNAL -->
+    <!-- Socket.io untuk multiplayer -->
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <!-- Game script utama -->
     <script src="games_retro.js"></script>
 </body>
 </html>

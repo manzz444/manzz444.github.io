@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Multiplayer Test | Retro Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f0f0f;
+            font-family: 'Courier New', monospace;
+            color: #00ff99;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: #111;
+            border: 2px solid #00ff99;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0,255,150,0.2);
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #00ff99;
+            border-bottom: 1px solid #00ff99;
+            padding-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .status {
+            background: #1a1a1a;
+            padding: 15px;
+            border-left: 5px solid #00ff99;
+            margin-bottom: 20px;
+            min-height: 100px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+        }
+
+        .status-line {
+            margin: 5px 0;
+            color: #888;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 5px;
+            color: #00ff99;
+            font-weight: bold;
+        }
+
+        .input-field {
+            background: #222;
+            border: 2px solid #00ff99;
+            color: #00ff99;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            box-shadow: 0 0 10px #00ff99;
+        }
+
+        .btn {
+            background: #00ff99;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .btn:hover {
+            background: #00cc77;
+            transform: scale(1.02);
+        }
+
+        .btn-primary {
+            background: #00ff99;
+            color: #000;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .btn-start {
+            background: #007bff;
+            color: white;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .divider {
+            border: 1px solid #333;
+            margin: 20px 0;
+        }
+
+        .players-container {
+            margin: 20px 0;
+        }
+
+        .players-title {
+            margin-bottom: 10px;
+            color: #00ff99;
+        }
+
+        .players-list {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .player-badge {
+            background: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border-left: 3px solid #00ff99;
+            color: #00ff99;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.8em;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .status-value {
+            color: #00ff99;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🎮 MULTIPLAYER TEST</h1>
+        
+        <!-- Connection Status -->
+        <div class="status" id="status">
+            <div class="status-line">> Disconnected from server</div>
+            <div class="status-line">> Enter your name and connect</div>
+        </div>
+
+        <!-- Player Name Input -->
+        <div class="input-group">
+            <label for="playerName" class="input-label">👤 Your Name</label>
+            <input type="text" id="playerName" class="input-field" placeholder="Enter your name" value="Player">
+        </div>
+
+        <!-- Connect Button -->
+        <button id="connectBtn" class="btn btn-primary">🔌 Connect to Server</button>
+
+        <!-- Session Controls (hidden initially) -->
+        <div id="sessionControls" class="session-controls hidden">
+            <hr class="divider">
+            
+            <div class="input-group">
+                <label for="sessionCode" class="input-label">📋 Session Code</label>
+                <input type="text" id="sessionCode" class="input-field" placeholder="Enter session code">
+            </div>
+
+            <div class="button-group">
+                <button id="createSessionBtn" class="btn btn-success">➕ Create Session</button>
+                <button id="joinSessionBtn" class="btn btn-warning">🔑 Join Session</button>
+            </div>
+
+            <button id="startGameBtn" class="btn btn-start hidden">🎮 Start Game</button>
+        </div>
+
+        <!-- Players List -->
+        <div id="playersContainer" class="players-container hidden">
+            <h3 class="players-title">👥 Players in Session</h3>
+            <div class="players-list" id="playersList"></div>
+        </div>
+
+        <div class="footer">
+            [CONNECTED: <span id="connectionStatus" class="status-value">NO</span>] 
+            [SESSION: <span id="sessionStatus" class="status-value">NONE</span>]
+        </div>
+    </div>
+
+    <!-- Socket.io CDN -->
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    
+    <script>
+        let socket = null;
+        let currentSession = null;
+
+        // DOM Elements
+        const status = document.getElementById('status');
+        const playerName = document.getElementById('playerName');
+        const connectBtn = document.getElementById('connectBtn');
+        const sessionControls = document.getElementById('sessionControls');
+        const sessionCode = document.getElementById('sessionCode');
+        const createSessionBtn = document.getElementById('createSessionBtn');
+        const joinSessionBtn = document.getElementById('joinSessionBtn');
+        const startGameBtn = document.getElementById('startGameBtn');
+        const playersContainer = document.getElementById('playersContainer');
+        const playersList = document.getElementById('playersList');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const sessionStatus = document.getElementById('sessionStatus');
+
+        function addStatus(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = 'status-line';
+            div.innerHTML = `> ${message}`;
+            if (type === 'success') div.style.color = '#00ff99';
+            if (type === 'error') div.style.color = '#ff6b6b';
+            if (type === 'info') div.style.color = '#888';
+            status.appendChild(div);
+            status.scrollTop = status.scrollHeight;
+        }
+
+        connectBtn.addEventListener('click', () => {
+            const name = playerName.value.trim();
+            if (!name) {
+                alert('Please enter your name');
+                return;
+            }
+
+            socket = io('http://localhost:3001');
+
+            socket.on('connect', () => {
+                addStatus(`✅ Connected to server (ID: ${socket.id})`, 'success');
+                connectionStatus.innerText = 'YES';
+                sessionControls.classList.remove('hidden');
+                connectBtn.disabled = true;
+                connectBtn.style.opacity = '0.5';
+            });
+
+            socket.on('connection-success', (data) => {
+                addStatus(data.message, 'success');
+            });
+
+            socket.on('session-created', (data) => {
+                currentSession = data.sessionCode;
+                sessionCode.value = data.sessionCode;
+                sessionStatus.innerText = data.sessionCode;
+                addStatus(`✅ ${data.message}`, 'success');
+                playersContainer.classList.remove('hidden');
+                startGameBtn.classList.remove('hidden');
+            });
+
+            socket.on('player-joined', (data) => {
+                addStatus(`👤 ${data.message}`, 'info');
+                updatePlayersList(data.players);
+            });
+
+            socket.on('game-started', (data) => {
+                addStatus(`🎮 ${data.message}`, 'success');
+                updatePlayersList(data.players);
+                startGameBtn.disabled = true;
+            });
+
+            socket.on('player-left', (data) => {
+                addStatus(`👋 ${data.message}`, 'info');
+                updatePlayersList(data.players);
+            });
+
+            socket.on('error', (data) => {
+                addStatus(`❌ Error: ${data.message}`, 'error');
+            });
+
+            socket.on('disconnect', () => {
+                addStatus('🔴 Disconnected from server', 'error');
+                connectionStatus.innerText = 'NO';
+                sessionControls.classList.add('hidden');
+                playersContainer.classList.add('hidden');
+                startGameBtn.classList.add('hidden');
+                connectBtn.disabled = false;
+                connectBtn.style.opacity = '1';
+            });
+        });
+
+        createSessionBtn.addEventListener('click', () => {
+            const name = playerName.value.trim();
+            if (!socket) {
+                addStatus('❌ Connect to server first', 'error');
+                return;
+            }
+
+            socket.emit('create-session', {
+                gameId: 4,
+                playerName: name
+            });
+        });
+
+        joinSessionBtn.addEventListener('click', () => {
+            const name = playerName.value.trim();
+            const code = sessionCode.value.trim();
+
+            if (!socket) {
+                addStatus('❌ Connect to server first', 'error');
+                return;
+            }
+
+            if (!code) {
+                addStatus('❌ Enter session code', 'error');
+                return;
+            }
+
+            socket.emit('join-session', {
+                sessionCode: code,
+                playerName: name
+            });
+        });
+
+        startGameBtn.addEventListener('click', () => {
+            if (!currentSession) {
+                addStatus('❌ No active session', 'error');
+                return;
+            }
+
+            socket.emit('start-game', {
+                sessionCode: currentSession
+            });
+        });
+
+        function updatePlayersList(players) {
+            playersList.innerHTML = '';
+            players.forEach(player => {
+                const badge = document.createElement('span');
+                badge.className = 'player-badge';
+                badge.innerHTML = `👤 ${player.name}`;
+                playersList.appendChild(badge);
+            });
+        }
+    </script>
+</body>
+</html>

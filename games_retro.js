@@ -1,24 +1,30 @@
-// games_retro.js - with persistent score using localStorage
+// ==================== GAMES RETRO - COMPLETE EDITION ====================
+// Dengan fitur: Solo Games (3 game) + Multiplayer Battle (via Socket.io)
+// Skor tersimpan di localStorage, multiplayer via backend
+
+// ==================== KONFIGURASI & STATE ====================
 const STORAGE_KEY = 'retroGameScore';
-
-// Load score dari localStorage
 let score = parseInt(localStorage.getItem(STORAGE_KEY)) || 0;
-
 let secretNumber = Math.floor(Math.random() * 10) + 1;
 let mathAnswer = 0;
 
-// Fungsi untuk menyimpan skor
+// Multiplayer state
+let socket = null;
+let currentSession = null;
+let isMultiplayer = false;
+let playerName = localStorage.getItem('playerName') || 'Player';
+
+// ==================== FUNGSI SKOR ====================
 function saveScore() {
     localStorage.setItem(STORAGE_KEY, score);
 }
 
-// Update tampilan skor
 function updateScore() {
-    document.getElementById('gameScore').innerHTML = `🏆 SCORE: ${score}`;
+    const scoreEl = document.getElementById('gameScore');
+    if (scoreEl) scoreEl.innerHTML = `🏆 SCORE: ${score}`;
     saveScore();
 }
 
-// Reset skor (untuk admin/developer)
 function resetScore() {
     if (confirm('Reset score to zero?')) {
         score = 0;
@@ -26,32 +32,45 @@ function resetScore() {
     }
 }
 
-// TAMPILAN MENU
+// ==================== NAVIGASI MENU ====================
 function showMenu() {
     document.querySelectorAll('.game-area').forEach(el => el.classList.add('hidden'));
-    document.getElementById('gameMenu').classList.remove('hidden');
+    const menu = document.getElementById('gameMenu');
+    if (menu) menu.classList.remove('hidden');
 }
 
-// FUNGSI UTAMA
-function showGame(game) {
-    document.getElementById('gameMenu').classList.add('hidden');
-    document.getElementById('gameGuess').classList.add('hidden');
-    document.getElementById('gameRPS').classList.add('hidden');
-    document.getElementById('gameQuiz').classList.add('hidden');
+function hideAllGames() {
+    document.querySelectorAll('.game-area').forEach(el => el.classList.add('hidden'));
+    const menu = document.getElementById('gameMenu');
+    if (menu) menu.classList.add('hidden');
+}
 
-    if (game === 'guess') {
-        document.getElementById('gameGuess').classList.remove('hidden');
-        resetGuessGame();
-    } else if (game === 'rps') {
-        document.getElementById('gameRPS').classList.remove('hidden');
-        document.getElementById('rpsDisplay').innerText = 'VS';
-    } else if (game === 'quiz') {
-        document.getElementById('gameQuiz').classList.remove('hidden');
-        generateMathQuestion();
+function showGame(game) {
+    hideAllGames();
+    
+    switch(game) {
+        case 'guess':
+            document.getElementById('gameGuess').classList.remove('hidden');
+            resetGuessGame();
+            break;
+        case 'rps':
+            document.getElementById('gameRPS').classList.remove('hidden');
+            document.getElementById('rpsDisplay').innerText = 'VS';
+            break;
+        case 'quiz':
+            document.getElementById('gameQuiz').classList.remove('hidden');
+            generateMathQuestion();
+            break;
+        case 'multi':
+            document.getElementById('gameMultiLobby').classList.remove('hidden');
+            if (!socket) initMultiplayer();
+            break;
+        default:
+            showMenu();
     }
 }
 
-// GAME 1: TEBAK ANGKA
+// ==================== GAME 1: TEBAK ANGKA ====================
 function resetGuessGame() {
     secretNumber = Math.floor(Math.random() * 10) + 1;
     document.getElementById('guessDisplay').innerText = '❓';
@@ -83,7 +102,7 @@ function checkGuess() {
     }
 }
 
-// GAME 2: ROCK PAPER SCISSORS
+// ==================== GAME 2: ROCK PAPER SCISSORS ====================
 function playRPS(move) {
     const moves = ['rock', 'paper', 'scissors'];
     const emoji = { rock: '🪨', paper: '📄', scissors: '✂️' };
@@ -104,7 +123,7 @@ function playRPS(move) {
         score += 30;
     } else {
         result = '💔 LOSE! +5';
-        score += 5; // Hiburan dikit biar gak frustasi
+        score += 5;
     }
 
     display.innerHTML = `${emoji[move]} VS ${emoji[computer]}`;
@@ -112,19 +131,18 @@ function playRPS(move) {
     updateScore();
 }
 
-// GAME 3: MATH QUIZ
+// ==================== GAME 3: MATH QUIZ ====================
 function generateMathQuestion() {
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
     const ops = ['+', '-', '×'];
     const op = ops[Math.floor(Math.random() * 3)];
 
-    let question = `${num1} ${op} ${num2}`;
     if (op === '+') mathAnswer = num1 + num2;
     else if (op === '-') mathAnswer = num1 - num2;
     else mathAnswer = num1 * num2;
 
-    document.getElementById('quizDisplay').innerText = question + ' = ?';
+    document.getElementById('quizDisplay').innerText = `${num1} ${op} ${num2} = ?`;
     document.getElementById('quizInput').value = '';
 }
 
@@ -143,12 +161,75 @@ function checkMath() {
         generateMathQuestion();
     } else {
         msg.innerText = '❌ WRONG! +10';
-        score += 10; // Tetap kasih poin biar semangat
+        score += 10;
     }
     updateScore();
 }
 
-// RESET GAME (UNTUK CHEAT / ADMIN)
+// ==================== MULTIPLAYER (GAME 4) ====================
+function initMultiplayer() {
+    if (socket) return;
+    
+    socket = io('http://localhost:3001');
+
+    socket.on('connect', () => {
+        addStatus('✅ Connected to server', 'success');
+    });
+
+    socket.on('session-created', (data) => {
+        currentSession = data.sessionCode;
+        document.getElementById('multiSessionCode').value = data.sessionCode;
+        addStatus(`✅ Session created: ${data.sessionCode}`, 'success');
+        document.getElementById('multiPlayersList').classList.remove('hidden');
+        document.getElementById('multiStartGameBtn').classList.remove('hidden');
+    });
+
+    socket.on('player-joined', (data) => {
+        addStatus(`👤 ${data.message}`, 'info');
+        updatePlayersList(data.players);
+    });
+
+    socket.on('game-started', (data) => {
+        addStatus(`🎮 Game started!`, 'success');
+        startMultiplayerGame(data.players);
+    });
+
+    socket.on('player-left', (data) => {
+        addStatus(`👋 ${data.message}`, 'info');
+        updatePlayersList(data.players);
+    });
+
+    socket.on('error', (data) => {
+        addStatus(`❌ ${data.message}`, 'error');
+    });
+}
+
+function addStatus(message, type) {
+    const msgEl = document.getElementById('gameMessage');
+    if (msgEl) {
+        msgEl.innerText = message;
+        msgEl.style.color = type === 'error' ? '#ff6b6b' : '#00ff99';
+    }
+}
+
+function updatePlayersList(players) {
+    const container = document.getElementById('multiPlayersContainer');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    players.forEach(player => {
+        container.innerHTML += `<div class="player-item">👤 ${player.name}</div>`;
+    });
+}
+
+function startMultiplayerGame(players) {
+    isMultiplayer = true;
+    hideAllGames();
+    document.getElementById('gameMultiBattle').classList.remove('hidden');
+    // Di sini nanti logic game multiplayer-nya
+}
+
+// ==================== CHEAT / ADMIN ====================
 function cheatReset() {
     if (confirm('🛠️ Reset game? (Admin only)')) {
         score = 0;
@@ -159,47 +240,78 @@ function cheatReset() {
     }
 }
 
-// EVENT LISTENERS
+// ==================== EVENT LISTENERS ====================
 document.addEventListener('DOMContentLoaded', () => {
-    // Tampilkan skor saat halaman dimuat
+    // Update skor
     updateScore();
 
-    // Menu
+    // Menu solo games
     document.querySelectorAll('.btn-game[data-game]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             showGame(e.target.dataset.game);
         });
     });
 
-    // Game 1
-    document.getElementById('guessBtn').addEventListener('click', checkGuess);
-    document.getElementById('guessInput').addEventListener('keypress', (e) => {
+    // Tombol multiplayer (akan ditambahkan secara dinamis)
+    const multiBtn = document.createElement('button');
+    multiBtn.className = 'btn-game';
+    multiBtn.setAttribute('data-game', 'multi');
+    multiBtn.innerHTML = '🎮 04 - MULTIPLAYER BATTLE';
+    document.querySelector('.game-menu').appendChild(multiBtn);
+
+    // Game 1: Tebak Angka
+    document.getElementById('guessBtn')?.addEventListener('click', checkGuess);
+    document.getElementById('guessInput')?.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') checkGuess();
     });
 
-    // Game 2
+    // Game 2: RPS
     document.querySelectorAll('.btn-rps').forEach(btn => {
         btn.addEventListener('click', (e) => {
             playRPS(e.target.dataset.move);
         });
     });
-
-    // Game 2 alternate via PLAY button
-    document.getElementById('rpsPlay').addEventListener('click', () => {
+    document.getElementById('rpsPlay')?.addEventListener('click', () => {
         const random = ['rock', 'paper', 'scissors'][Math.floor(Math.random() * 3)];
         playRPS(random);
     });
 
-    // Game 3
-    document.getElementById('quizBtn').addEventListener('click', checkMath);
-    document.getElementById('quizInput').addEventListener('keypress', (e) => {
+    // Game 3: Math Quiz
+    document.getElementById('quizBtn')?.addEventListener('click', checkMath);
+    document.getElementById('quizInput')?.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') checkMath();
     });
 
-    // Cheat code: ketik "reset" di console untuk reset skor
+    // Multiplayer buttons (akan diinisialisasi setelah DOM siap)
+    setTimeout(() => {
+        document.getElementById('multiCreateBtn')?.addEventListener('click', () => {
+            socket?.emit('create-session', { gameId: 4, playerName });
+        });
+
+        document.getElementById('multiJoinBtn')?.addEventListener('click', () => {
+            const code = document.getElementById('multiSessionCode')?.value.trim();
+            if (!code) {
+                addStatus('❌ Enter session code', 'error');
+                return;
+            }
+            socket?.emit('join-session', { sessionCode: code, playerName });
+        });
+
+        document.getElementById('multiStartGameBtn')?.addEventListener('click', () => {
+            if (!currentSession) {
+                addStatus('❌ No active session', 'error');
+                return;
+            }
+            socket?.emit('start-game', { sessionCode: currentSession });
+        });
+    }, 100);
+
     console.log('🎮 Retro Games loaded! Type cheatReset() to reset score.');
 });
 
-// Ekspos fungsi ke global (biar bisa dipanggil dari console)
+// ==================== EKSPOR FUNGSI GLOBAL ====================
 window.cheatReset = cheatReset;
 window.resetScore = resetScore;
+window.showMenu = showMenu;
+window.showGame = showGame;
+window.playRPS = playRPS;
