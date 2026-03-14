@@ -195,19 +195,47 @@ function resetMultiplayerLobby() {
 
 function initMultiplayer() {
     if (socket) {
-        addMultiStatus('⚠️ Already connected or connecting...', 'info');
-        return;
+        if (socket.connected) {
+            addMultiStatus('✅ Already connected', 'success');
+            return;
+        } else {
+            socket.disconnect();
+            socket = null;
+        }
     }
     
     addMultiStatus('🔄 Connecting to server...', 'info');
     
-    // Gunakan 127.0.0.1 bukan localhost untuk menghindari DNS issue
-    socket = io('http://localhost:3001', {
+    // Coba kedua URL untuk antisipasi
+    const serverUrl = 'http://localhost:3001';
+    
+    socket = io(serverUrl, {
         reconnection: true,
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
-        timeout: 10000
+        timeout: 10000,
+        transports: ['polling', 'websocket'] // Prioritaskan polling dulu
     });
+
+    socket.on('connect', () => {
+        addMultiStatus('✅ Connected to server', 'success');
+        document.getElementById('multiConnectionStatus').innerText = 'YES';
+        document.getElementById('multiSessionControls').classList.remove('hidden');
+    });
+
+    socket.on('connect_error', (err) => {
+        addMultiStatus(`❌ Connection error: ${err.message}`, 'error');
+        console.error('Socket connect error:', err);
+        
+        // Coba dengan transport websocket saja
+        if (socket.io.opts.transports[0] === 'polling') {
+            addMultiStatus('🔄 Switching to websocket...', 'info');
+            socket.io.opts.transports = ['websocket'];
+        }
+    });
+
+    // ... sisanya tetap sama
+}
 
     socket.on('connect', () => {
         addMultiStatus('✅ Connected to server', 'success');
