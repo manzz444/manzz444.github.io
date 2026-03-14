@@ -35,8 +35,7 @@
         </div>
 
         <div class="terminal-footer">
-            <span>[CONNECTION: SECURE]</span>
-            <span>[PORT: 22]</span>
+            <!-- Akan diisi oleh JavaScript -->
         </div>
     </div>
 
@@ -47,11 +46,21 @@
             
             if (password === '786343') {
                 sessionStorage.setItem('hackerAuth', 'true');
+                sessionStorage.removeItem('guestAuth');
                 document.getElementById('passwordPrompt').classList.add('hidden');
                 document.getElementById('mainContent').classList.remove('hidden');
                 document.getElementById('userIndicator').innerText = 'admin';
                 
-                // Trigger terminal siap
+                if (window.initializeTerminal) {
+                    window.initializeTerminal();
+                }
+            } else if (password === '489621') {
+                sessionStorage.setItem('guestAuth', 'true');
+                sessionStorage.removeItem('hackerAuth');
+                document.getElementById('passwordPrompt').classList.add('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+                document.getElementById('userIndicator').innerText = 'guest';
+                
                 if (window.initializeTerminal) {
                     window.initializeTerminal();
                 }
@@ -65,6 +74,10 @@
                 document.getElementById('passwordPrompt').classList.add('hidden');
                 document.getElementById('mainContent').classList.remove('hidden');
                 document.getElementById('userIndicator').innerText = 'admin';
+            } else if (sessionStorage.getItem('guestAuth') === 'true') {
+                document.getElementById('passwordPrompt').classList.add('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+                document.getElementById('userIndicator').innerText = 'guest';
             }
         };
     </script>
