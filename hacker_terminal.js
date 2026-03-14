@@ -27,7 +27,6 @@ function updateFooter() {
     if (footer) {
         footer.innerHTML = `
             <span>[GUEST LOGIN: 489621]</span>
-            <span>[ADMIN LOGIN: 786343]</span>
             <span>[PORT: 22]</span>
         `;
     }
