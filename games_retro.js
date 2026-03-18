@@ -1,8 +1,4 @@
-// ==================== GAMES RETRO - COMPLETE EDITION ====================
-// Dengan fitur: Solo Games (3 game) + Multiplayer Battle (via Socket.io)
-// Skor tersimpan di localStorage, multiplayer via backend
-
-// ==================== KONFIGURASI & STATE ====================
+// ==================== GAMES RETRO - FINAL EDITION ====================
 const STORAGE_KEY = 'retroGameScore';
 let score = parseInt(localStorage.getItem(STORAGE_KEY)) || 0;
 let secretNumber = Math.floor(Math.random() * 10) + 1;
@@ -11,12 +7,9 @@ let mathAnswer = 0;
 // Multiplayer state
 let socket = null;
 let currentSession = null;
-let isMultiplayer = false;
 let playerName = localStorage.getItem('playerName') || 'Player';
-let reconnectAttempts = 0;
-const MAX_RECONNECT = 3;
 
-// ==================== FUNGSI SKOR ====================
+// ==================== SKOR ====================
 function saveScore() {
     localStorage.setItem(STORAGE_KEY, score);
 }
@@ -34,7 +27,7 @@ function resetScore() {
     }
 }
 
-// ==================== NAVIGASI MENU ====================
+// ==================== NAVIGASI ====================
 function showMenu() {
     document.querySelectorAll('.game-area').forEach(el => el.classList.add('hidden'));
     const menu = document.getElementById('gameMenu');
@@ -72,7 +65,7 @@ function showGame(game) {
     }
 }
 
-// ==================== GAME 1: TEBAK ANGKA ====================
+// ==================== GAME 1 ====================
 function resetGuessGame() {
     secretNumber = Math.floor(Math.random() * 10) + 1;
     document.getElementById('guessDisplay').innerText = '❓';
@@ -104,7 +97,7 @@ function checkGuess() {
     }
 }
 
-// ==================== GAME 2: ROCK PAPER SCISSORS ====================
+// ==================== GAME 2 ====================
 function playRPS(move) {
     const moves = ['rock', 'paper', 'scissors'];
     const emoji = { rock: '🪨', paper: '📄', scissors: '✂️' };
@@ -133,7 +126,7 @@ function playRPS(move) {
     updateScore();
 }
 
-// ==================== GAME 3: MATH QUIZ ====================
+// ==================== GAME 3 ====================
 function generateMathQuestion() {
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
@@ -168,7 +161,7 @@ function checkMath() {
     updateScore();
 }
 
-// ==================== MULTIPLAYER FUNCTIONS ====================
+// ==================== MULTIPLAYER ====================
 function resetMultiplayerLobby() {
     const statusDiv = document.getElementById('multiStatus');
     if (statusDiv) {
@@ -189,18 +182,12 @@ function resetMultiplayerLobby() {
         socket.disconnect();
         socket = null;
     }
-    reconnectAttempts = 0;
 }
 
 function initMultiplayer() {
-    if (socket) {
-        if (socket.connected) {
-            addMultiStatus('✅ Already connected', 'success');
-            return;
-        } else {
-            socket.disconnect();
-            socket = null;
-        }
+    if (socket && socket.connected) {
+        addMultiStatus('✅ Already connected', 'success');
+        return;
     }
     
     addMultiStatus('🔄 Connecting to server...', 'info');
@@ -209,26 +196,17 @@ function initMultiplayer() {
         reconnection: true,
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
-        timeout: 10000,
-        transports: ['polling', 'websocket']
+        timeout: 10000
     });
 
     socket.on('connect', () => {
         addMultiStatus('✅ Connected to server', 'success');
         document.getElementById('multiConnectionStatus').innerText = 'YES';
         document.getElementById('multiSessionControls').classList.remove('hidden');
-        reconnectAttempts = 0;
     });
 
     socket.on('connect_error', (err) => {
         addMultiStatus(`❌ Connection error: ${err.message}`, 'error');
-        reconnectAttempts++;
-        
-        if (reconnectAttempts >= MAX_RECONNECT) {
-            addMultiStatus('❌ Failed to connect after multiple attempts', 'error');
-            socket.disconnect();
-            socket = null;
-        }
     });
 
     socket.on('session-created', (data) => {
@@ -259,16 +237,12 @@ function initMultiplayer() {
         addMultiStatus(`❌ ${data.message}`, 'error');
     });
 
-    socket.on('disconnect', (reason) => {
-        addMultiStatus(`🔴 Disconnected: ${reason}`, 'error');
+    socket.on('disconnect', () => {
+        addMultiStatus('🔴 Disconnected from server', 'error');
         document.getElementById('multiConnectionStatus').innerText = 'NO';
         document.getElementById('multiSessionControls').classList.add('hidden');
         document.getElementById('multiPlayersList').classList.add('hidden');
         document.getElementById('multiStartGameBtn').classList.add('hidden');
-        
-        if (reason === 'io server disconnect') {
-            socket = null;
-        }
     });
 }
 
@@ -303,13 +277,12 @@ function updateMultiPlayersList(players) {
 }
 
 function startMultiplayerGame(players) {
-    isMultiplayer = true;
     hideAllGames();
     document.getElementById('gameMultiBattle').classList.remove('hidden');
     addMultiStatus(`🎮 Battle started with ${players.length} players!`, 'success');
 }
 
-// ==================== CHEAT / ADMIN ====================
+// ==================== CHEAT ====================
 function cheatReset() {
     if (confirm('🛠️ Reset game? (Admin only)')) {
         score = 0;
@@ -350,7 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') checkMath();
     });
 
-    // ===== MULTIPLAYER EVENT LISTENERS =====
     document.getElementById('multiConnectBtn')?.addEventListener('click', () => {
         const name = document.getElementById('multiPlayerName').value.trim();
         if (!name) {
@@ -398,8 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('multiSendMove')?.addEventListener('click', () => {
         addMultiStatus('Move sent!', 'success');
     });
-
-    console.log('🎮 Retro Games loaded! Type cheatReset() to reset score.');
 });
 
 window.cheatReset = cheatReset;
